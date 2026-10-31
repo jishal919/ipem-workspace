@@ -1,0 +1,1373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IPEM — Admin Control Center</title>
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <link rel="stylesheet" href="css/admin.css">
+  <link rel="stylesheet" href="css/dialogs.css?v=1">
+</head>
+<body>
+
+  <!-- Sidebar Navigation -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <a href="index.html" class="sidebar-brand">
+        <div class="brand-logo">IP</div>
+        <span class="brand-name">Control Center</span>
+      </a>
+    </div>
+
+    <nav class="sidebar-nav">
+      <!-- Dashboard -->
+      <div class="nav-group">
+        <div class="nav-items">
+          <a class="nav-item active" data-view="dashboard">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+            Dashboard
+          </a>
+        </div>
+      </div>
+
+      <!-- Operations -->
+      <div class="nav-group">
+        <div class="nav-group-title">Operations</div>
+        <div class="nav-items">
+          <a class="nav-item" data-view="users">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            Users
+          </a>
+          <a class="nav-item" data-view="programs">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/><line x1="12" y1="2" x2="12" y2="22"/></svg>
+            Programs
+          </a>
+          <a class="nav-item" data-view="conversations">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Conversations
+          </a>
+        </div>
+      </div>
+
+      <!-- Analytics -->
+      <div class="nav-group">
+        <div class="nav-group-title">Analytics</div>
+        <div class="nav-items">
+          <a class="nav-item" data-view="analytics-requests">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            Requests
+          </a>
+          <a class="nav-item" data-view="analytics-activity">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            Activity
+          </a>
+          <a class="nav-item" data-view="analytics-ai">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l-7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+            AI Usage
+          </a>
+        </div>
+      </div>
+
+      <!-- Security -->
+      <div class="nav-group">
+        <div class="nav-group-title">Security</div>
+        <div class="nav-items">
+          <a class="nav-item" data-view="security-flags">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+            Security Flags
+          </a>
+          <a class="nav-item" data-view="security-incidents">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            Incidents
+          </a>
+          <a class="nav-item" data-view="security-ip">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            IP Intelligence
+          </a>
+        </div>
+      </div>
+
+      <!-- Infrastructure -->
+      <div class="nav-group">
+        <div class="nav-group-title">Infrastructure</div>
+        <div class="nav-items">
+          <a class="nav-item" data-view="infra-health">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            System Health
+          </a>
+          <a class="nav-item" data-view="infra-metrics">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"/></svg>
+            Metrics
+          </a>
+          <a class="nav-item" data-view="infra-alerts">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            Alerts
+          </a>
+        </div>
+      </div>
+
+      <!-- Administration -->
+      <div class="nav-group">
+        <div class="nav-group-title">Administration</div>
+        <div class="nav-items">
+          <a class="nav-item" data-view="admin-audit">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+            Audit Logs
+          </a>
+          <a class="nav-item" data-view="admin-roles">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><circle cx="12" cy="11" r="3"/></svg>
+            Roles & Access
+          </a>
+          <a class="nav-item" data-view="admin-settings">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            Settings
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-display">
+        <div class="user-avatar" id="avatarPill">AC</div>
+        <div class="user-details">
+          <span class="user-name" id="userNameText">Admin</span>
+          <span class="user-role" id="userRoleText">Owner</span>
+        </div>
+      </div>
+      <button class="logout-btn" id="sidebarLogout" title="Logout">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Workspace -->
+  <main class="workspace">
+    <header class="header">
+      <div class="header-title-section">
+        <h1 class="header-title" id="viewTitle">Dashboard</h1>
+        <span class="header-status" id="headerStatusText">Live overview</span>
+      </div>
+
+      <div class="header-actions">
+        <!-- Global Search button -->
+        <button class="search-trigger" onclick="openSearchPalette()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <span>Quick search...</span>
+          <span class="kbd">Ctrl+K</span>
+        </button>
+
+        <button class="btn btn-xs" onclick="refreshCurrentView()" id="refreshBtn">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+          Refresh
+        </button>
+      </div>
+    </header>
+
+    <div class="content">
+
+      <!-- ==================== DASHBOARD VIEW ==================== -->
+      <section class="view-container active" id="view-dashboard">
+        <!-- Top Metrics Cards -->
+        <div class="metrics-row" id="dashboard-metrics">
+          <div class="widget">
+            <span class="widget-label">Online Users</span>
+            <span class="widget-value" id="stat-online-users">—</span>
+          </div>
+          <div class="widget">
+            <span class="widget-label">Total Users</span>
+            <span class="widget-value" id="stat-total-users">—</span>
+          </div>
+          <div class="widget">
+            <span class="widget-label">Active Programs</span>
+            <span class="widget-value" id="stat-active-programs">—</span>
+          </div>
+          <div class="widget">
+            <span class="widget-label">Audit Events Today</span>
+            <span class="widget-value" id="stat-active-execs">—</span>
+          </div>
+          <div class="widget">
+            <span class="widget-label">Requests / Min</span>
+            <span class="widget-value" id="stat-rpm">—</span>
+          </div>
+          <div class="widget">
+            <span class="widget-label">AI Cost Today</span>
+            <span class="widget-value" id="stat-ai-cost">—</span>
+          </div>
+        </div>
+
+        <div class="dashboard-grid">
+          <!-- Live Activity Feed -->
+          <div class="card">
+            <div class="card-title-section">
+              <h2 class="card-title">Live Activity Feed</h2>
+              <span class="badge badge-active" style="font-size: 9px;">Real-time</span>
+            </div>
+            <div class="activity-feed" id="dashboard-activity-feed">
+              <div class="empty-state">Loading activity feed...</div>
+            </div>
+          </div>
+
+          <!-- Infrastructure Health -->
+          <div class="card">
+            <div class="card-title-section">
+              <h2 class="card-title">Infrastructure Health</h2>
+            </div>
+            <div class="system-monitors" id="dashboard-health-widgets" style="grid-template-columns: 1fr; gap: 14px;">
+              <div class="empty-state">Loading infrastructure status...</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== USERS VIEW ==================== -->
+      <section class="view-container" id="view-users">
+        <div class="permissions-banner" id="user-permissions-banner" style="display:none;">
+          <span>Permissions notice: Only Owner can modify user roles. Admin & Owner can suspend/unsuspend.</span>
+        </div>
+        <div class="filters-bar">
+          <div class="filters-left">
+            <div class="search-input-wrap">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" class="filter-input" placeholder="Search by name or email..." id="user-search-query">
+            </div>
+            <select class="filter-select" id="user-filter-role">
+              <option value="">All Roles</option>
+              <option value="owner">Owner</option>
+              <option value="admin">Admin</option>
+              <option value="moderator">Moderator</option>
+              <option value="user">User</option>
+            </select>
+            <select class="filter-select" id="user-filter-status">
+              <option value="">All Statuses</option>
+              <option value="active">Active</option>
+              <option value="suspended">Suspended</option>
+              <option value="banned">Banned</option>
+              <option value="disabled">Disabled</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <table id="users-table">
+            <thead>
+              <tr>
+                <th>User</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Joined</th>
+                <th>Last Login</th>
+                <th>Programs</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Populated via Javascript -->
+            </tbody>
+          </table>
+        </div>
+
+        <div class="pagination">
+          <span class="pagination-info" id="users-pagination-info">Showing 0-0 of 0 users</span>
+          <div class="pagination-controls">
+            <button class="btn btn-xs" id="users-prev-btn" disabled>Prev</button>
+            <button class="btn btn-xs" id="users-next-btn" disabled>Next</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== PROGRAMS VIEW ==================== -->
+      <section class="view-container" id="view-programs">
+        <div class="filters-bar">
+          <div class="filters-left">
+            <div class="search-input-wrap">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" class="filter-input" placeholder="Search programs..." id="programs-search-query">
+            </div>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <table id="programs-table">
+            <thead>
+              <tr>
+                <th>Program Name</th>
+                <th>Owner</th>
+                <th>Language</th>
+                <th>Status</th>
+                <th>Executions</th>
+                <th>Success Rate</th>
+                <th>Updated</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Populated via Javascript -->
+            </tbody>
+          </table>
+        </div>
+
+        <div class="pagination">
+          <span class="pagination-info" id="programs-pagination-info">Showing 0-0 of 0 programs</span>
+          <div class="pagination-controls">
+            <button class="btn btn-xs" id="programs-prev-btn" disabled>Prev</button>
+            <button class="btn btn-xs" id="programs-next-btn" disabled>Next</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== CONVERSATIONS VIEW ==================== -->
+      <section class="view-container" id="view-conversations">
+        <div class="filters-bar">
+          <div class="filters-left">
+            <div class="search-input-wrap">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" class="filter-input" placeholder="Search conversations..." id="conversations-search-query">
+            </div>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <table id="conversations-table">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Owner</th>
+                <th>Messages</th>
+                <th>Status</th>
+                <th>Created</th>
+                <th>Last Active</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Populated via Javascript -->
+            </tbody>
+          </table>
+        </div>
+
+        <div class="pagination">
+          <span class="pagination-info" id="conversations-pagination-info">Showing 0-0 of 0 conversations</span>
+          <div class="pagination-controls">
+            <button class="btn btn-xs" id="conversations-prev-btn" disabled>Prev</button>
+            <button class="btn btn-xs" id="conversations-next-btn" disabled>Next</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== ANALYTICS - REQUESTS ==================== -->
+      <section class="view-container" id="view-analytics-requests">
+        <div class="metrics-row">
+          <div class="widget">
+            <span class="widget-label">Total Requests (24h)</span>
+            <span class="widget-value" id="requests-stat-total">—</span>
+          </div>
+          <div class="widget">
+            <span class="widget-label">Average Latency</span>
+            <span class="widget-value" id="requests-stat-avg-latency">—</span>
+          </div>
+          <div class="widget">
+            <span class="widget-label">Error Rate</span>
+            <span class="widget-value" id="requests-stat-error-rate">—</span>
+          </div>
+        </div>
+
+        <div class="dashboard-grid" style="grid-template-columns: 1fr 1fr;">
+          <div class="card">
+            <h2 class="card-title" style="margin-bottom: 12px;">Top Endpoints</h2>
+            <div class="table-container">
+              <table id="requests-top-endpoints-table">
+                <thead>
+                  <tr>
+                    <th>Endpoint</th>
+                    <th>Method</th>
+                    <th>Hits</th>
+                    <th>Avg Latency</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Populated via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2 class="card-title" style="margin-bottom: 12px;">Slowest Endpoints</h2>
+            <div class="table-container">
+              <table id="requests-slowest-endpoints-table">
+                <thead>
+                  <tr>
+                    <th>Endpoint</th>
+                    <th>Method</th>
+                    <th>Avg Latency</th>
+                    <th>Hits</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Populated via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== ANALYTICS - ACTIVITY ==================== -->
+      <section class="view-container" id="view-analytics-activity">
+        <div class="card" style="margin-bottom: 20px;">
+          <h2 class="card-title" style="margin-bottom: 16px;">Most Active Users (Activity volume)</h2>
+          <div class="table-container">
+            <table id="activity-top-users-table">
+              <thead>
+                <tr>
+                  <th>User</th>
+                  <th>Activity Count</th>
+                  <th>Programs Created</th>
+                  <th>Executions</th>
+                  <th>Last Seen</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- JS populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== ANALYTICS - AI USAGE ==================== -->
+      <section class="view-container" id="view-analytics-ai">
+
+        <!-- Top Control Bar -->
+        <div class="filters-bar" style="margin-bottom: 20px;">
+          <div class="filters-left">
+            <h2 class="card-title" style="margin: 0; font-size: 18px; display: flex; align-items: center; gap: 8px;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+              AI Usage & Telemetry Overview
+            </h2>
+          </div>
+          <div class="filters-right" style="display: flex; gap: 8px; align-items: center;">
+            <span class="status-indicator active" id="ai-live-indicator" style="font-size: 12px; margin-right: 8px;">● Live Telemetry</span>
+            <button class="btn btn-secondary btn-xs" onclick="loadAnalyticsAi()">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+              Refresh
+            </button>
+          </div>
+        </div>
+
+        <!-- Summary Cards Grid (12 Cards) -->
+        <div class="metrics-row" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 20px;">
+          <div class="widget">
+            <span class="widget-label">Requests (24h)</span>
+            <span class="widget-value" id="ai-stat-reqs-24h">—</span>
+          </div>
+          <div class="widget">
+            <span class="widget-label">Requests (All Time)</span>
+            <span class="widget-value" id="ai-stat-reqs-all">—</span>
+          </div>
+          <div class="widget">
+            <span class="widget-label">Successful Requests</span>
+            <span class="widget-value" style="color: var(--success);" id="ai-stat-succ-reqs">—</span>
+          </div>
+          <div class="widget">
+            <span class="widget-label">Failed Requests</span>
+            <span class="widget-value" style="color: var(--danger);" id="ai-stat-fail-reqs">—</span>
+          </div>
+          <div class="widget">
+            <span class="widget-label">Success Rate</span>
+            <span class="widget-value" id="ai-stat-success-rate">—</span>
+          </div>
+          <div class="widget">
+            <span class="widget-label">Average Latency</span>
+            <span class="widget-value" id="ai-stat-avg-latency">—</span>
+          </div>
+          <div class="widget">
+            <span class="widget-label">Total Tokens</span>
+            <span class="widget-value" id="ai-stat-total-tokens">—</span>
+          </div>
+          <div class="widget">
+            <span class="widget-label">Prompt Tokens</span>
+            <span class="widget-value" id="ai-stat-prompt-tokens">—</span>
+          </div>
+          <div class="widget">
+            <span class="widget-label">Completion Tokens</span>
+            <span class="widget-value" id="ai-stat-completion-tokens">—</span>
+          </div>
+          <div class="widget">
+            <span class="widget-label">Total Est. Cost</span>
+            <span class="widget-value" id="ai-stat-total-cost">—</span>
+          </div>
+          <div class="widget">
+            <span class="widget-label">Cost Today</span>
+            <span class="widget-value" id="ai-stat-cost-today">—</span>
+          </div>
+          <div class="widget">
+            <span class="widget-label">Cost This Month</span>
+            <span class="widget-value" id="ai-stat-cost-month">—</span>
+          </div>
+        </div>
+
+        <!-- Integrations Cards Row (LiteLLM, Ollama, Groq) -->
+        <div class="dashboard-grid" style="grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; margin-bottom: 20px;">
+
+          <!-- LiteLLM Gateway Card -->
+          <div class="card" id="card-litellm">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+              <h3 class="card-title" style="margin: 0; font-size: 15px;">⚡ LiteLLM Proxy Gateway</h3>
+              <span class="badge" id="litellm-status-badge">Checking...</span>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 12px; margin-bottom: 12px;" id="litellm-info-grid">
+              <div><span style="color:var(--text-dark);">Total Requests:</span> <strong id="litellm-reqs">—</strong></div>
+              <div><span style="color:var(--text-dark);">Avg Latency:</span> <strong id="litellm-latency">—</strong></div>
+              <div><span style="color:var(--text-dark);">Active Providers:</span> <strong id="litellm-providers-count">—</strong></div>
+              <div><span style="color:var(--text-dark);">Routing:</span> <strong id="litellm-routing">simple-shuffle</strong></div>
+              <div><span style="color:var(--text-dark);">Retries:</span> <strong>3 Max</strong></div>
+              <div><span style="color:var(--text-dark);">Cache Rate:</span> <strong>N/A</strong></div>
+            </div>
+            <div style="font-size: 11px; color: var(--text-dark); margin-bottom: 6px; font-weight: 600;">Configured Aliases & Fallbacks:</div>
+            <div id="litellm-models-list" style="font-size: 11px; max-height: 110px; overflow-y: auto; background: var(--bg-card-alt); padding: 8px; border-radius: 6px; font-family: var(--mono);">
+              <!-- JS Populated -->
+            </div>
+          </div>
+
+          <!-- Ollama Local Card -->
+          <div class="card" id="card-ollama">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+              <h3 class="card-title" style="margin: 0; font-size: 15px;">🦙 Ollama Local Engine</h3>
+              <span class="badge" id="ollama-status-badge">Checking...</span>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 12px; margin-bottom: 12px;">
+              <div><span style="color:var(--text-dark);">Downloaded Models:</span> <strong id="ollama-models-count">—</strong></div>
+              <div><span style="color:var(--text-dark);">Loaded VRAM:</span> <strong id="ollama-active-count">—</strong></div>
+              <div><span style="color:var(--text-dark);">Total Reqs:</span> <strong id="ollama-reqs">—</strong></div>
+              <div><span style="color:var(--text-dark);">Avg Latency:</span> <strong id="ollama-latency">—</strong></div>
+            </div>
+            <div style="font-size: 11px; color: var(--text-dark); margin-bottom: 6px; font-weight: 600;">Downloaded Models & RAM/VRAM:</div>
+            <div id="ollama-models-list" style="font-size: 11px; max-height: 110px; overflow-y: auto; background: var(--bg-card-alt); padding: 8px; border-radius: 6px; font-family: var(--mono);">
+              <!-- JS Populated -->
+            </div>
+          </div>
+
+          <!-- Groq Cloud Card -->
+          <div class="card" id="card-groq">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+              <h3 class="card-title" style="margin: 0; font-size: 15px;">🚀 Groq Cloud LPU</h3>
+              <span class="badge badge-success" id="groq-status-badge">Free Tier ($0.00)</span>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 12px; margin-bottom: 12px;">
+              <div><span style="color:var(--text-dark);">Billing:</span> <strong style="color:var(--success);">Free Provider</strong></div>
+              <div><span style="color:var(--text-dark);">Total Cost:</span> <strong>$0.00 (Free)</strong></div>
+              <div><span style="color:var(--text-dark);">Total Reqs:</span> <strong id="groq-reqs">—</strong></div>
+              <div><span style="color:var(--text-dark);">Avg Latency:</span> <strong id="groq-latency">—</strong></div>
+            </div>
+            <div style="font-size: 11px; color: var(--text-dark); margin-bottom: 6px; font-weight: 600;">Active Models:</div>
+            <div id="groq-models-list" style="font-size: 11px; background: var(--bg-card-alt); padding: 8px; border-radius: 6px; font-family: var(--mono);">
+              • llama-3.3-70b-versatile<br>
+              • qwen-2.5-coder-32b<br>
+              • llama-3.1-70b-versatile
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Timeline Chart Card -->
+        <div class="card" style="margin-bottom: 20px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 16px;">
+            <div>
+              <h3 class="card-title" style="margin: 0; font-size: 16px;">📈 AI Request & Telemetry Timeline</h3>
+              <span style="font-size: 12px; color: var(--text-dark);">Real-time time series metrics over configured periods</span>
+            </div>
+            <div style="display: flex; gap: 12px; align-items: center;">
+              <select id="ai-timeline-metric" class="filter-input" style="width: auto; height: 30px; font-size: 12px;" onchange="renderAiTimelineChart()">
+                <option value="requests">Metric: Requests</option>
+                <option value="tokens">Metric: Tokens</option>
+                <option value="cost">Metric: Cost ($)</option>
+                <option value="latency">Metric: Avg Latency (ms)</option>
+              </select>
+              <div class="button-group" style="display: inline-flex; gap: 4px;">
+                <button class="btn btn-xs btn-secondary ai-range-btn" id="range-btn-24h" onclick="setAiTimelineRange('24h')">24h</button>
+                <button class="btn btn-xs btn-primary ai-range-btn" id="range-btn-7d" onclick="setAiTimelineRange('7d')">7 Days</button>
+                <button class="btn btn-xs btn-secondary ai-range-btn" id="range-btn-30d" onclick="setAiTimelineRange('30d')">30 Days</button>
+                <button class="btn btn-xs btn-secondary ai-range-btn" id="range-btn-all" onclick="setAiTimelineRange('all')">All Time</button>
+              </div>
+            </div>
+          </div>
+          <div class="chart-bar-container" id="ai-chart-tokens" style="height: 180px; align-items: flex-end; gap: 6px; padding: 10px 0;">
+            <!-- JS Populated Bars/SVG -->
+          </div>
+          <div class="chart-labels" id="ai-chart-labels" style="display: flex; justify-content: space-between; margin-top: 8px; font-size: 11px; color: var(--text-dark);">
+            <span>Start</span>
+            <span>End</span>
+          </div>
+        </div>
+
+        <!-- Provider Health Grid -->
+        <div class="card" style="margin-bottom: 20px;">
+          <h3 class="card-title" style="margin-bottom: 12px; font-size: 16px;">🏥 Provider Health Status</h3>
+          <div class="table-container">
+            <table id="ai-provider-health-table">
+              <thead>
+                <tr>
+                  <th>Provider</th>
+                  <th>Status</th>
+                  <th>Avg Latency</th>
+                  <th>Rate Limits</th>
+                  <th>Last Error</th>
+                  <th>Last Successful Request</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- JS Populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Provider Usage & Model Usage Tables -->
+        <div class="dashboard-grid" style="grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
+
+          <!-- Provider Usage Table -->
+          <div class="card">
+            <h3 class="card-title" style="margin-bottom: 12px; font-size: 16px;">🏢 Usage by Provider</h3>
+            <div class="table-container">
+              <table id="ai-provider-usage-table">
+                <thead>
+                  <tr>
+                    <th>Provider</th>
+                    <th>Requests</th>
+                    <th>Tokens</th>
+                    <th>Latency</th>
+                    <th>Cost</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- JS Populated -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Model Usage Table -->
+          <div class="card">
+            <h3 class="card-title" style="margin-bottom: 12px; font-size: 16px;">🤖 Usage by Model (Sorted by Volume)</h3>
+            <div class="table-container">
+              <table id="ai-model-dist-table">
+                <thead>
+                  <tr>
+                    <th>Model</th>
+                    <th>Requests</th>
+                    <th>Tokens</th>
+                    <th>Success</th>
+                    <th>Cost</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- JS Populated -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Cost Breakdown Table -->
+        <div class="card" style="margin-bottom: 20px;">
+          <h3 class="card-title" style="margin-bottom: 12px; font-size: 16px;">💰 Multi-Dimensional Cost Breakdown</h3>
+          <div class="table-container">
+            <table id="ai-cost-breakdown-table">
+              <thead>
+                <tr>
+                  <th>Dimension</th>
+                  <th>Name / Entity</th>
+                  <th>Provider / Model</th>
+                  <th>Requests</th>
+                  <th>Estimated Cost</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- JS Populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Recent AI Activity Table -->
+        <div class="card">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <h3 class="card-title" style="margin: 0; font-size: 16px;">📜 Recent AI Activity Log</h3>
+            <span style="font-size: 12px; color: var(--text-dark);">Click any request to view full details</span>
+          </div>
+          <div class="table-container">
+            <table id="ai-recent-activity-table">
+              <thead>
+                <tr>
+                  <th>Timestamp</th>
+                  <th>User</th>
+                  <th>Session / Conv</th>
+                  <th>Provider</th>
+                  <th>Model</th>
+                  <th>Prompt L.</th>
+                  <th>Comp. L.</th>
+                  <th>Latency</th>
+                  <th>Tokens</th>
+                  <th>Status</th>
+                  <th>Cost</th>
+                  <th>Details</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- JS Populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Request Details Modal -->
+      <div class="modal" id="modal-ai-request-detail" style="display:none;">
+        <div class="modal-overlay" onclick="closeAiRequestDetailModal()"></div>
+        <div class="modal-card" style="max-width: 650px; width: 90%;">
+          <div class="modal-header">
+            <h3 class="modal-title" id="ai-modal-title">AI Request Details</h3>
+            <button class="modal-close" onclick="closeAiRequestDetailModal()">✕</button>
+          </div>
+          <div class="modal-body" id="ai-modal-body" style="font-size: 13px;">
+            <!-- JS Populated -->
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary btn-xs" onclick="closeAiRequestDetailModal()">Close</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== SECURITY FLAGS VIEW ==================== -->
+      <section class="view-container" id="view-security-flags">
+        <div class="table-container">
+          <table id="security-flags-table">
+            <thead>
+              <tr>
+                <th>Severity</th>
+                <th>Type</th>
+                <th>User</th>
+                <th>IP Address</th>
+                <th>Timestamp</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- JS populated -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ==================== SECURITY INCIDENTS VIEW ==================== -->
+      <section class="view-container" id="view-security-incidents">
+        <div class="table-container">
+          <table id="security-incidents-table">
+            <thead>
+              <tr>
+                <th>Severity</th>
+                <th>Incident ID</th>
+                <th>Title</th>
+                <th>Affected User</th>
+                <th>Resolution Status</th>
+                <th>Timestamp</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- JS populated -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ==================== SECURITY IP INTEL ==================== -->
+      <section class="view-container" id="view-security-ip">
+        <div class="filters-bar">
+          <div class="filters-left">
+            <div class="search-input-wrap">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" class="filter-input" placeholder="Query IP Reputation (e.g. 127.0.0.1)..." id="security-ip-query" onkeydown="if(event.key==='Enter')searchIPReputation()">
+            </div>
+            <button class="btn btn-primary btn-xs" onclick="searchIPReputation()">Scan IP</button>
+            <button class="btn btn-danger btn-xs" onclick="openBanIPModal()">Ban IP</button>
+          </div>
+        </div>
+
+        <div class="card" id="ip-info-card" style="display:none; margin-bottom: 20px;">
+          <h2 class="card-title" style="margin-bottom: 12px;" id="ip-card-title">IP Reputation Info</h2>
+          <div class="detail-grid" id="ip-details-grid">
+            <!-- JS Populated -->
+          </div>
+        </div>
+
+        <div class="card">
+          <h2 class="card-title" style="margin-bottom: 12px;">Active IP Bans & Rules</h2>
+          <div class="table-container">
+            <table id="security-ip-rules-table">
+              <thead>
+                <tr>
+                  <th>IP Address</th>
+                  <th>Reputation Score</th>
+                  <th>Is Banned</th>
+                  <th>Flag Count</th>
+                  <th>Incident Count</th>
+                  <th>Last Seen</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- JS Populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== INFRASTRUCTURE - HEALTH ==================== -->
+      <section class="view-container" id="view-infra-health">
+        <div class="system-monitors" id="health-grid-details">
+          <!-- CPU, Memory, Disk, Services -->
+        </div>
+      </section>
+
+      <!-- ==================== INFRASTRUCTURE - METRICS ==================== -->
+      <section class="view-container" id="view-infra-metrics">
+        <div class="card" style="margin-bottom: 20px;">
+          <h2 class="card-title" style="margin-bottom: 12px;">Metric Historical Trends (CPU / Memory)</h2>
+          <div class="chart-bar-container" id="infra-metrics-chart">
+            <!-- SVG / Flex bars representing history -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== INFRASTRUCTURE - ALERTS ==================== -->
+      <section class="view-container" id="view-infra-alerts">
+        <div class="table-container">
+          <table id="infra-alerts-table">
+            <thead>
+              <tr>
+                <th>Severity</th>
+                <th>Alert Title</th>
+                <th>Description</th>
+                <th>Status</th>
+                <th>Timestamp</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- JS Populated -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ==================== AUDIT LOGS ==================== -->
+      <section class="view-container" id="view-admin-audit">
+        <div class="filters-bar">
+          <div class="filters-left">
+            <div class="search-input-wrap">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" class="filter-input" placeholder="Search audit logs..." id="audit-search-query">
+            </div>
+            <select class="filter-select" id="audit-filter-action">
+              <option value="">All Actions</option>
+              <!-- JS Populated -->
+            </select>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <table id="audit-table">
+            <thead>
+              <tr>
+                <th>Timestamp</th>
+                <th>Actor Email</th>
+                <th>Action</th>
+                <th>Target</th>
+                <th>IP Address</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- JS Populated -->
+            </tbody>
+          </table>
+        </div>
+
+        <div class="pagination">
+          <span class="pagination-info" id="audit-pagination-info">Showing 0-0 of 0 logs</span>
+          <div class="pagination-controls">
+            <button class="btn btn-xs" id="audit-prev-btn" disabled>Prev</button>
+            <button class="btn btn-xs" id="audit-next-btn" disabled>Next</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== ROLES VIEW ==================== -->
+      <section class="view-container" id="view-admin-roles">
+        <div class="card">
+          <h2 class="card-title" style="margin-bottom: 12px;">RBAC Role Access Levels</h2>
+          <p style="color:var(--text-muted); margin-bottom: 16px;">These role permission mappings are locked on the backend server for safety.</p>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Role</th>
+                  <th>Inheritance Ranking</th>
+                  <th>Core Privileges</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="badge badge-owner">Owner</span></td>
+                  <td>Level 4 (Max)</td>
+                  <td>Full administrative actions, including changing administrator roles.</td>
+                </tr>
+                <tr>
+                  <td><span class="badge badge-admin">Admin</span></td>
+                  <td>Level 3</td>
+                  <td>User suspension, incident resolution, infrastructure and logs access. Can check IP Intelligence.</td>
+                </tr>
+                <tr>
+                  <td><span class="badge badge-mod">Moderator</span></td>
+                  <td>Level 2</td>
+                  <td>View operations databases. User/Program details overview. Read-only audit access.</td>
+                </tr>
+                <tr>
+                  <td><span class="badge badge-user">User</span></td>
+                  <td>Level 1</td>
+                  <td>Standard workspace capabilities. Scoped strictly to self-created projects.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== SETTINGS VIEW ==================== -->
+      <section class="view-container" id="view-admin-settings">
+        <div class="card" style="max-width: 600px;">
+          <h2 class="card-title" style="margin-bottom: 16px;">Platform Settings</h2>
+          <div class="form-group" style="margin-bottom: 14px;">
+            <label class="form-label">System Uptime Monitor</label>
+            <div style="font-family: var(--mono); color: var(--accent);" id="settings-uptime-val">Loading...</div>
+          </div>
+          <div class="form-group" style="margin-bottom: 14px;">
+            <label class="form-label">Active Database Engines</label>
+            <div style="color:var(--text-muted);">SQLite 3 + Redis Cache Gateway</div>
+          </div>
+          <div class="form-group" style="margin-bottom: 14px;">
+            <label class="form-label">Docker Execution Environment</label>
+            <div style="color:var(--text-muted);" id="settings-docker-status">Unavailable</div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ==================== USER DETAIL DRAWER ==================== -->
+  <div class="drawer-backdrop" id="user-drawer-backdrop" onclick="closeUserDrawer()"></div>
+  <div class="drawer" id="user-drawer">
+    <div class="drawer-header">
+      <h2 class="drawer-title" id="user-drawer-title">User Profile</h2>
+      <button class="drawer-close" onclick="closeUserDrawer()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="drawer-tabs">
+      <div class="drawer-tab active" data-tab="user-overview" onclick="switchDrawerTab('user', 'overview')">Overview</div>
+      <div class="drawer-tab" data-tab="user-history" onclick="switchDrawerTab('user', 'history')">Activity</div>
+      <div class="drawer-tab" data-tab="user-notes" onclick="switchDrawerTab('user', 'notes')">Admin Notes</div>
+      <div class="drawer-tab" data-tab="user-messages" onclick="switchDrawerTab('user', 'messages')">Direct Messages</div>
+      <div class="drawer-tab" data-tab="user-conversations" onclick="switchDrawerTab('user', 'conversations')">Conversations</div>
+      <div class="drawer-tab" data-tab="user-programs" onclick="switchDrawerTab('user', 'programs')">Programs</div>
+    </div>
+    <div class="drawer-body">
+      <!-- Overview Tab -->
+      <div class="drawer-tab-content active" id="user-tab-overview">
+        <div class="detail-section-title">Identity</div>
+        <div class="detail-grid">
+          <div class="detail-item"><span class="detail-label">Name</span><span class="detail-value" id="user-detail-name">—</span></div>
+          <div class="detail-item"><span class="detail-label">Email</span><span class="detail-value" id="user-detail-email">—</span></div>
+          <div class="detail-item"><span class="detail-label">User ID</span><span class="detail-value-mono" id="user-detail-id">—</span></div>
+          <div class="detail-item"><span class="detail-label">Role</span><span class="detail-value" id="user-detail-role">—</span></div>
+        </div>
+
+        <div class="detail-section-title">Status & Metadata</div>
+        <div class="detail-grid">
+          <div class="detail-item"><span class="detail-label">Status</span><span class="detail-value" id="user-detail-status">—</span></div>
+          <div class="detail-item"><span class="detail-label">Created At</span><span class="detail-value" id="user-detail-created">—</span></div>
+          <div class="detail-item"><span class="detail-label">Last Login</span><span class="detail-value" id="user-detail-lastlogin">—</span></div>
+          <div class="detail-item"><span class="detail-label">Verified</span><span class="detail-value" id="user-detail-verified">—</span></div>
+        </div>
+
+        <div class="detail-section-title">Administration Controls</div>
+        <div style="display:flex; gap: 8px; flex-wrap: wrap;">
+          <button class="btn btn-primary btn-xs" id="user-action-role-btn" onclick="openChangeRoleModal()">Change Role</button>
+          <button class="btn btn-danger btn-xs" id="user-action-status-btn" onclick="openChangeStatusModal()">Suspend/Ban</button>
+          <button class="btn btn-danger btn-xs" id="user-action-delete-btn" onclick="deleteUserAccount()" style="display: none; justify-content: center;">Delete Account</button>
+        </div>
+      </div>
+
+      <!-- Activity Tab -->
+      <div class="drawer-tab-content" id="user-tab-history">
+        <div class="timeline" id="user-detail-activity-timeline">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+
+      <!-- Notes Tab -->
+      <div class="drawer-tab-content" id="user-tab-notes">
+        <div class="notes-container">
+          <div class="notes-list" id="user-notes-list">
+            <!-- Dynamic notes -->
+          </div>
+          <div class="note-input-row">
+            <textarea class="note-textarea" placeholder="Add administrative note..." id="user-note-input"></textarea>
+            <button class="btn btn-primary" onclick="addUserNote()">Post Note</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Direct Messages Tab -->
+      <div class="drawer-tab-content" id="user-tab-messages">
+        <div class="notes-container" style="flex: 1;">
+          <div class="notes-list" id="user-messages-list" style="padding-bottom: 20px;">
+            <!-- Dynamic messages -->
+          </div>
+          <div class="note-input-row" style="flex-direction: column; align-items: stretch; gap: 8px;">
+            <textarea class="note-textarea" placeholder="Type a message to this user..." id="user-message-input" style="min-height: 80px;"></textarea>
+            <div style="display: flex; justify-content: flex-end;">
+              <button class="btn btn-primary" onclick="sendAdminMessage()">Send Direct Message</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Conversations Tab -->
+      <div class="drawer-tab-content" id="user-tab-conversations">
+        <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+          <input type="text" id="user-conversations-search" class="form-input" placeholder="Search conversations..." onkeydown="if(event.key === 'Enter') loadUserConversations()">
+          <button class="btn btn-primary btn-xs" onclick="loadUserConversations()">Search</button>
+        </div>
+        <div class="user-conversations-list" id="user-conversations-list" style="display: flex; flex-direction: column; gap: 12px; max-height: calc(100vh - 250px); overflow-y: auto; padding-right: 4px;">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+
+      <!-- Programs Tab -->
+      <div class="drawer-tab-content" id="user-tab-programs">
+        <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+          <input type="text" id="user-programs-search" class="form-input" placeholder="Search programs..." onkeydown="if(event.key === 'Enter') loadUserPrograms()">
+          <button class="btn btn-primary btn-xs" onclick="loadUserPrograms()">Search</button>
+        </div>
+        <div class="user-programs-list" id="user-programs-list" style="display: flex; flex-direction: column; gap: 12px; max-height: calc(100vh - 250px); overflow-y: auto; padding-right: 4px;">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== PROGRAM DETAIL DRAWER ==================== -->
+  <div class="drawer-backdrop" id="program-drawer-backdrop" onclick="closeProgramDrawer()"></div>
+  <div class="drawer" id="program-drawer">
+    <div class="drawer-header">
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <button class="drawer-back" onclick="closeProgramDrawer()">← Back</button>
+        <h2 class="drawer-title" id="program-drawer-title">Program Details</h2>
+      </div>
+      <button class="drawer-close" onclick="closeProgramDrawer()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="drawer-tabs">
+      <div class="drawer-tab active" data-tab="program-overview" onclick="switchDrawerTab('program', 'overview')">Overview</div>
+      <div class="drawer-tab" data-tab="program-notes" onclick="switchDrawerTab('program', 'notes')">Admin Notes</div>
+      <div class="drawer-tab" data-tab="program-code" onclick="switchDrawerTab('program', 'code')">Code</div>
+    </div>
+    <div class="drawer-body">
+      <div class="drawer-tab-content active" id="program-tab-overview">
+        <div class="detail-section-title">Program Metadata</div>
+        <div class="detail-grid">
+          <div class="detail-item"><span class="detail-label">Name</span><span class="detail-value" id="program-detail-name">—</span></div>
+          <div class="detail-item"><span class="detail-label">Language</span><span class="detail-value" id="program-detail-lang">—</span></div>
+          <div class="detail-item"><span class="detail-label">Owner ID</span><span class="detail-value-mono" id="program-detail-owner">—</span></div>
+          <div class="detail-item"><span class="detail-label">Status</span><span class="detail-value" id="program-detail-status">—</span></div>
+        </div>
+        <div class="detail-section-title">Moderation Actions</div>
+        <div style="display:flex; gap: 8px;">
+          <button class="btn btn-danger btn-xs" id="prog-action-toggle-status" onclick="toggleProgramStatus()">Disable/Enable</button>
+          <button class="btn btn-danger btn-xs" id="prog-action-lock" onclick="toggleProgramLock()">Lock/Unlock Execution</button>
+          <button class="btn btn-danger btn-xs" id="prog-action-delete" onclick="deleteProgram()">Delete Program</button>
+        </div>
+      </div>
+      <div class="drawer-tab-content" id="program-tab-notes">
+        <div class="notes-container">
+          <div class="notes-list" id="program-notes-list"></div>
+          <div class="note-input-row">
+            <textarea class="note-textarea" placeholder="Add administrative note..." id="program-note-input"></textarea>
+            <button class="btn btn-primary" onclick="addProgramNote()">Post</button>
+          </div>
+        </div>
+      </div>
+      <!-- Code Tab -->
+      <div class="drawer-tab-content" id="program-tab-code" style="flex: 1; height: 100%; flex-direction: column;">
+        <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 8px;">
+          <span style="font-weight: 500; font-size: 13px; color: var(--accent); font-family: var(--mono);" id="program-code-filename-display">No file selected</span>
+          <div style="margin-left: auto; display: flex; gap: 8px;">
+            <button id="program-code-edit-toggle-btn" class="btn btn-xs" onclick="toggleProgramCodeEditing()" style="display: none;">Enable Editing</button>
+            <button id="program-code-save-btn" class="btn btn-primary btn-xs" onclick="saveProgramCodeChanges()" style="display: none;">Save Changes</button>
+          </div>
+        </div>
+        <div style="display: flex; flex: 1; min-height: 550px; height: calc(100vh - 220px); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden;">
+          <!-- Left: File Explorer -->
+          <div id="program-ide-explorer" style="width: 20%; min-width: 200px; border-right: 1px solid var(--border); background: rgba(255, 255, 255, 0.01); display: flex; flex-direction: column; overflow: auto; padding: 12px 0;">
+            <!-- Explorer content goes here -->
+          </div>
+          <!-- Right: Code Editor -->
+          <div style="flex: 1; position: relative;">
+            <div id="program-code-editor-pane" style="position: absolute; top:0; left:0; right:0; bottom:0;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== CONVERSATION DETAIL DRAWER ==================== -->
+  <div class="drawer-backdrop" id="conv-drawer-backdrop" onclick="closeConvDrawer()"></div>
+  <div class="drawer" id="conv-drawer">
+    <div class="drawer-header">
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <button class="drawer-back" onclick="closeConvDrawer()">← Back</button>
+        <h2 class="drawer-title" id="conv-drawer-title">Conversation Details</h2>
+      </div>
+      <button class="drawer-close" onclick="closeConvDrawer()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="drawer-tabs">
+      <div class="drawer-tab active" data-tab="conv-overview" onclick="switchDrawerTab('conv', 'overview')">Overview</div>
+      <div class="drawer-tab" data-tab="conv-notes" onclick="switchDrawerTab('conv', 'notes')">Admin Notes</div>
+    </div>
+    <div class="drawer-body">
+      <div class="drawer-tab-content active" id="conv-tab-overview">
+        <div class="detail-section-title">Conversation Metadata</div>
+        <div class="detail-grid">
+          <div class="detail-item"><span class="detail-label">Title</span><span class="detail-value" id="conv-detail-title">—</span></div>
+          <div class="detail-item"><span class="detail-label">Owner ID</span><span class="detail-value-mono" id="conv-detail-owner">—</span></div>
+          <div class="detail-item"><span class="detail-label">Session ID</span><span class="detail-value-mono" id="conv-detail-session">—</span></div>
+          <div class="detail-item"><span class="detail-label">Status</span><span class="detail-value" id="conv-detail-status">—</span></div>
+        </div>
+        <div class="detail-section-title" style="margin-top: 16px;">Moderation Actions</div>
+        <div style="display:flex; gap: 8px; margin-bottom: 20px;">
+          <button class="btn btn-danger btn-xs" id="conv-action-toggle-status" onclick="toggleConvStatus()">Lock/Unlock</button>
+          <button class="btn btn-danger btn-xs" id="conv-action-delete" onclick="deleteConv()">Delete</button>
+        </div>
+
+        <div class="detail-section-title" style="margin-top: 24px;">Conversation Transcript</div>
+        <div class="notes-list" id="conv-messages-list" style="max-height: 350px; overflow-y: auto; padding: 12px; background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 20px; display: flex; flex-direction: column; gap: 8px;">
+          <!-- Populated dynamically -->
+        </div>
+
+        <div id="conv-admin-message-section" style="display: none; margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border-subtle);">
+          <div class="detail-section-title">Administrator Message</div>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <textarea class="form-textarea" id="conv-admin-message-input" placeholder="Type a message to this user..." oninput="document.getElementById('conv-admin-message-chars').textContent = this.value.length + '/5000'" maxlength="5000"></textarea>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-size: 11px; color: var(--text-muted);" id="conv-admin-message-chars">0/5000</span>
+              <button class="btn btn-primary btn-xs" onclick="sendAdminMessageFromConv()">Send Message</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="drawer-tab-content" id="conv-tab-notes">
+        <div class="notes-container">
+          <div class="notes-list" id="conv-notes-list"></div>
+          <div class="note-input-row">
+            <textarea class="note-textarea" placeholder="Add administrative note..." id="conv-note-input"></textarea>
+            <button class="btn btn-primary" onclick="addConvNote()">Post</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== INCIDENT DETAIL DRAWER ==================== -->
+  <div class="drawer-backdrop" id="incident-drawer-backdrop" onclick="closeIncidentDrawer()"></div>
+  <div class="drawer" id="incident-drawer">
+    <div class="drawer-header">
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <button class="drawer-back" onclick="closeIncidentDrawer()">← Back</button>
+        <h2 class="drawer-title">Incident Details</h2>
+      </div>
+      <button class="drawer-close" onclick="closeIncidentDrawer()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="drawer-body">
+      <div class="detail-section-title">Incident Information</div>
+      <div class="detail-grid">
+        <div class="detail-item"><span class="detail-label">ID</span><span class="detail-value-mono" id="incident-detail-id">—</span></div>
+        <div class="detail-item"><span class="detail-label">Severity</span><span class="detail-value" id="incident-detail-severity">—</span></div>
+        <div class="detail-item"><span class="detail-label">Title</span><span class="detail-value" id="incident-detail-title">—</span></div>
+        <div class="detail-item"><span class="detail-label">User ID</span><span class="detail-value-mono" id="incident-detail-userid">—</span></div>
+        <div class="detail-item"><span class="detail-label">Status</span><span class="detail-value" id="incident-detail-status">—</span></div>
+        <div class="detail-item"><span class="detail-label">Timestamp</span><span class="detail-value" id="incident-detail-time">—</span></div>
+      </div>
+      <div class="detail-section-title">Description</div>
+      <pre id="incident-detail-desc">—</pre>
+
+      <div class="detail-section-title">Resolve Incident</div>
+      <div class="form-group">
+        <textarea class="form-textarea" placeholder="Enter resolution notes..." id="incident-resolution-notes"></textarea>
+      </div>
+      <button class="btn btn-primary btn-xs" id="incident-resolve-action-btn" onclick="resolveIncidentAction()">Resolve Incident</button>
+    </div>
+  </div>
+
+  <!-- ==================== AUDIT INSPECTOR DRAWER ==================== -->
+  <div class="drawer-backdrop" id="audit-drawer-backdrop" onclick="closeAuditDrawer()"></div>
+  <div class="drawer" id="audit-drawer">
+    <div class="drawer-header">
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <button class="drawer-back" onclick="closeAuditDrawer()">← Back</button>
+        <h2 class="drawer-title">Audit Record Details</h2>
+      </div>
+      <button class="drawer-close" onclick="closeAuditDrawer()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="drawer-body">
+      <div class="detail-section-title">Audit Metadata</div>
+      <div class="detail-grid">
+        <div class="detail-item"><span class="detail-label">ID</span><span class="detail-value-mono" id="audit-detail-id">—</span></div>
+        <div class="detail-item"><span class="detail-label">Timestamp</span><span class="detail-value" id="audit-detail-time">—</span></div>
+        <div class="detail-item"><span class="detail-label">Actor</span><span class="detail-value" id="audit-detail-actor">—</span></div>
+        <div class="detail-item"><span class="detail-label">Action</span><span class="detail-value" id="audit-detail-action">—</span></div>
+        <div class="detail-item"><span class="detail-label">IP Address</span><span class="detail-value" id="audit-detail-ip">—</span></div>
+        <div class="detail-item"><span class="detail-label">Severity</span><span class="detail-value" id="audit-detail-severity">—</span></div>
+      </div>
+      <div class="detail-section-title">Changes Overview</div>
+      <div class="detail-grid">
+        <div class="detail-item"><span class="detail-label">Old Value</span><span class="detail-value" id="audit-detail-old">—</span></div>
+        <div class="detail-item"><span class="detail-label">New Value</span><span class="detail-value" id="audit-detail-new">—</span></div>
+      </div>
+      <div class="detail-section-title">Full Event Payload</div>
+      <pre id="audit-detail-metadata">{}</pre>
+    </div>
+  </div>
+
+  <!-- ==================== SEARCH PALETTE MODAL ==================== -->
+  <div class="modal-backdrop" id="search-palette-backdrop" onclick="closeSearchPalette()">
+    <div class="modal search-modal" onclick="event.stopPropagation()">
+      <div class="search-modal-header">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" class="search-modal-input" placeholder="Search users, programs, audit, incidents..." id="search-palette-input" oninput="triggerGlobalSearch()">
+        <kbd class="kbd">ESC</kbd>
+      </div>
+      <div class="search-results" id="search-palette-results">
+        <div class="empty-state">Type query to search platform records...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== CHANGE ROLE MODAL ==================== -->
+  <div class="modal-backdrop" id="change-role-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title">Change User Role</h3>
+        <button class="drawer-close" onclick="closeChangeRoleModal()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">New Role</label>
+          <select class="form-select" id="change-role-select">
+            <option value="user">User</option>
+            <option value="moderator">Moderator</option>
+            <option value="admin">Admin</option>
+            <option value="owner">Owner</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" onclick="closeChangeRoleModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="submitChangeRole()">Apply Role</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== CHANGE STATUS (SUSPEND/BAN) MODAL ==================== -->
+  <div class="modal-backdrop" id="change-status-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title">Update User Status</h3>
+        <button class="drawer-close" onclick="closeChangeStatusModal()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">New Status</label>
+          <select class="form-select" id="change-status-select">
+            <option value="active">Active</option>
+            <option value="suspended">Suspended</option>
+            <option value="banned">Banned</option>
+            <option value="disabled">Disabled</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Reason / Memo</label>
+          <textarea class="form-textarea" placeholder="Explain status modification reasons..." id="change-status-reason"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" onclick="closeChangeStatusModal()">Cancel</button>
+        <button class="btn btn-danger" onclick="submitChangeStatus()">Apply Status</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== IP BAN MODAL ==================== -->
+  <div class="modal-backdrop" id="ip-ban-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title">Ban IP Address</h3>
+        <button class="drawer-close" onclick="closeBanIPModal()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">IP Address</label>
+          <input type="text" class="form-input" placeholder="e.g. 192.168.1.100" id="ban-ip-address">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Reason</label>
+          <textarea class="form-textarea" placeholder="Reason for banning this IP address..." id="ban-ip-reason"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" onclick="closeBanIPModal()">Cancel</button>
+        <button class="btn btn-danger" onclick="submitBanIP()">Ban IP</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="admin-toast-container"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.2/min/vs/loader.min.js"></script>
+  <script src="js/config.js?v=2"></script>
+  <script src="js/dialogs.js?v=1"></script>
+  <script src="js/admin.js?v=6"></script>
+</body>
+</html>

@@ -1,0 +1,122 @@
+.ipem-dialog-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(3, 3, 8, 0.76);
+  backdrop-filter: blur(7px);
+  animation: ipem-dialog-fade-in 140ms ease-out;
+}
+
+.ipem-dialog {
+  width: min(440px, 100%);
+  padding: 24px;
+  color: var(--text);
+  background: var(--bg2, #101018);
+  border: 1px solid var(--border2, rgba(255, 255, 255, 0.12));
+  border-radius: 14px;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.025);
+  animation: ipem-dialog-rise-in 160ms ease-out;
+}
+
+.ipem-dialog-title {
+  margin: 0;
+  font-family: var(--sans, Inter, sans-serif);
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--text, #f3f4f6);
+}
+
+.ipem-dialog-message {
+  margin: 10px 0 22px;
+  color: var(--text2, var(--text-muted, #9ca3af));
+  font: 13px/1.65 var(--body, Inter, sans-serif);
+  white-space: pre-line;
+}
+
+.ipem-dialog-input {
+  width: 100%;
+  min-height: 40px;
+  margin: -8px 0 20px;
+  padding: 9px 11px;
+  color: var(--text, #f3f4f6);
+  background: var(--bg3, rgba(255, 255, 255, 0.04));
+  border: 1px solid var(--border2, rgba(255, 255, 255, 0.12));
+  border-radius: 8px;
+  outline: none;
+  font: 13px var(--body, Inter, sans-serif);
+}
+
+.ipem-dialog-input:focus {
+  border-color: var(--accent, #7c6af7);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent, #7c6af7) 18%, transparent);
+}
+
+.ipem-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 9px;
+}
+
+.ipem-dialog-button {
+  min-height: 36px;
+  padding: 0 14px;
+  color: var(--text2, var(--text-muted, #9ca3af));
+  background: var(--bg4, rgba(255, 255, 255, 0.055));
+  border: 1px solid var(--border2, rgba(255, 255, 255, 0.11));
+  border-radius: 8px;
+  cursor: pointer;
+  font: 500 12px var(--body, Inter, sans-serif);
+  transition: background 140ms ease, border-color 140ms ease, color 140ms ease, transform 140ms ease;
+}
+
+.ipem-dialog-button:hover {
+  color: var(--text, #fff);
+  background: rgba(255, 255, 255, 0.09);
+  transform: translateY(-1px);
+}
+
+.ipem-dialog-button:focus-visible {
+  outline: 2px solid var(--accent, #7c6af7);
+  outline-offset: 2px;
+}
+
+.ipem-dialog-confirm {
+  color: #fff;
+  background: var(--accent, #7c6af7);
+  border-color: var(--accent, #7c6af7);
+}
+
+.ipem-dialog-confirm:hover {
+  color: #fff;
+  background: var(--accent-hover, var(--accent2, #5d4fd4));
+  border-color: var(--accent-hover, var(--accent2, #5d4fd4));
+}
+
+.ipem-dialog-confirm.is-danger {
+  background: var(--red, #ef4444);
+  border-color: var(--red, #ef4444);
+}
+
+.ipem-dialog-confirm.is-danger:hover {
+  background: color-mix(in srgb, var(--red, #ef4444) 84%, #000);
+  border-color: color-mix(in srgb, var(--red, #ef4444) 84%, #000);
+}
+
+@keyframes ipem-dialog-fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes ipem-dialog-rise-in { from { opacity: 0; transform: translateY(7px) scale(0.985); } to { opacity: 1; transform: translateY(0) scale(1); } }
+
+@media (max-width: 480px) {
+  .ipem-dialog { padding: 20px; }
+  .ipem-dialog-actions { flex-direction: column-reverse; }
+  .ipem-dialog-button { width: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ipem-dialog-overlay, .ipem-dialog { animation: none; }
+  .ipem-dialog-button { transition: none; }
+}

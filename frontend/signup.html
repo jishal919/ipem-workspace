@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IPEM — Create Account</title>
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<style>
+:root {
+  --bg:#0a0a0f; --bg2:#0f0f18; --bg3:#14141f; --bg4:#1a1a28; --bg5:#1f1f30;
+  --border:rgba(255,255,255,0.06); --border2:rgba(255,255,255,0.1);
+  --text:#e8e8f0; --text2:#9090a8; --text3:#5a5a72;
+  --accent:#7c6af7; --accent2:#5d4fd4; --accent3:#a394ff;
+  --green:#3dd68c; --red:#f75a5a; --amber:#f0a030; --blue:#4a9eff; --cyan:#00d4ff;
+  --mono:'JetBrains Mono',monospace; --sans:'Syne',sans-serif; --body:'Inter',sans-serif;
+  --radius:10px; --radius2:6px;
+}
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: var(--body); min-height: 100vh;
+  display: flex; flex-direction: column; overflow: hidden;
+}
+.bg-layer { position:fixed; inset:0; pointer-events:none; z-index:0; }
+.bg-grid {
+  position:absolute; inset:0;
+  background-image:
+    linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+.bg-glow-1 {
+  position:absolute; width:500px; height:500px;
+  top:-100px; right:-100px;
+  background:radial-gradient(circle, rgba(0,212,255,0.1) 0%, transparent 70%);
+  animation:glow-drift 10s ease-in-out infinite alternate;
+}
+.bg-glow-2 {
+  position:absolute; width:400px; height:400px;
+  bottom:-100px; left:50px;
+  background:radial-gradient(circle, rgba(124,106,247,0.1) 0%, transparent 70%);
+  animation:glow-drift 14s ease-in-out infinite alternate-reverse;
+}
+@keyframes glow-drift { from{transform:translate(0,0)} to{transform:translate(20px,15px)} }
+
+.page {
+  position:relative; z-index:1;
+  flex:1; display:grid;
+  grid-template-columns:480px 1fr;
+  min-height:100vh;
+}
+
+/* ── Left (form) ── */
+.left-panel {
+  background:var(--bg2); border-right:1px solid var(--border);
+  display:flex; align-items:center; justify-content:center;
+  padding:48px 40px;
+}
+.auth-card { width:100%; max-width:380px; opacity:0; animation:fade-up 0.5s ease 0.1s forwards; }
+
+.brand-row { display:flex; align-items:center; gap:10px; margin-bottom:32px; }
+.logo-mark {
+  width:36px; height:36px;
+  background:linear-gradient(135deg,var(--accent),var(--cyan));
+  border-radius:9px; display:flex; align-items:center; justify-content:center;
+  font-family:var(--mono); font-size:12px; font-weight:600; color:white;
+}
+.logo-text { font-family:var(--sans); font-size:18px; font-weight:700; color:var(--text); letter-spacing:-0.3px; }
+
+/* ── Step indicator ── */
+.steps {
+  display:flex; gap:8px; align-items:center; margin-bottom:28px;
+}
+.step {
+  display:flex; align-items:center; gap:6px;
+  font-size:11px; color:var(--text3); font-family:var(--mono);
+  opacity:0.5; transition:opacity 0.2s;
+}
+.step.active { opacity:1; color:var(--accent3); }
+.step.done { opacity:0.7; color:var(--green); }
+.step-dot {
+  width:20px; height:20px; border-radius:50%;
+  background:var(--bg4); border:1px solid var(--border2);
+  display:flex; align-items:center; justify-content:center;
+  font-size:10px; font-weight:600; transition:all 0.2s;
+}
+.step.active .step-dot { background:rgba(124,106,247,0.2); border-color:var(--accent); color:var(--accent3); }
+.step.done .step-dot { background:rgba(61,214,140,0.15); border-color:var(--green); color:var(--green); }
+.step-divider { width:20px; height:1px; background:var(--border2); }
+
+.auth-title {
+  font-family:var(--sans); font-size:22px; font-weight:700;
+  color:var(--text); margin-bottom:6px; letter-spacing:-0.3px;
+}
+.auth-subtitle { font-size:13px; color:var(--text3); margin-bottom:28px; }
+
+/* Google */
+.google-btn-container {
+  width:100%; display:flex; justify-content:center;
+  margin-bottom:8px; min-height:44px;
+}
+
+.divider { display:flex; align-items:center; gap:12px; margin:20px 0; }
+.divider-line { flex:1; height:1px; background:var(--border); }
+.divider-text { font-size:11px; color:var(--text3); font-family:var(--mono); }
+
+/* Fields */
+.field { margin-bottom:14px; }
+.field-label { display:block; font-size:11px; color:var(--text3); margin-bottom:5px; font-family:var(--mono); letter-spacing:0.3px; }
+.field-input {
+  width:100%; padding:10px 14px;
+  background:var(--bg3); border:1px solid var(--border2);
+  border-radius:var(--radius2); font-size:13px; color:var(--text); font-family:var(--body);
+  outline:none; transition:border-color 0.15s;
+}
+.field-input:focus { border-color:var(--accent); }
+.field-input::placeholder { color:var(--text3); }
+.field-input.error { border-color:var(--red); }
+
+/* Password strength */
+.pwd-strength { margin-top:6px; display:flex; gap:4px; }
+.pwd-bar {
+  flex:1; height:3px; border-radius:2px;
+  background:var(--bg5); transition:background 0.3s;
+}
+.pwd-bar.weak { background:var(--red); }
+.pwd-bar.fair { background:var(--amber); }
+.pwd-bar.good { background:var(--blue); }
+.pwd-bar.strong { background:var(--green); }
+
+/* Submit */
+.submit-btn {
+  width:100%; padding:12px;
+  background:linear-gradient(135deg, var(--accent), var(--accent2));
+  border:none; border-radius:var(--radius);
+  font-size:13px; font-weight:500; color:white; font-family:var(--body);
+  cursor:pointer; transition:opacity 0.15s, transform 0.1s;
+  margin-top:6px;
+  display:flex; align-items:center; justify-content:center; gap:8px;
+}
+.submit-btn:hover { opacity:0.9; }
+.submit-btn:active { transform:scale(0.99); }
+.submit-btn:disabled { opacity:0.5; cursor:not-allowed; }
+
+/* Message */
+.msg-box {
+  padding:10px 14px; border-radius:var(--radius2);
+  font-size:12px; margin-bottom:14px; display:none;
+}
+.msg-box.error  { background:rgba(247,90,90,0.1); border:1px solid rgba(247,90,90,0.25); color:var(--red); display:block; }
+.msg-box.success{ background:rgba(61,214,140,0.1); border:1px solid rgba(61,214,140,0.25); color:var(--green); display:block; }
+
+/* Footer */
+.auth-footer { text-align:center; margin-top:20px; font-size:12px; color:var(--text3); }
+.auth-footer a { color:var(--accent3); text-decoration:none; }
+.auth-footer a:hover { text-decoration:underline; }
+
+/* OTP inputs */
+.otp-row { display:flex; gap:10px; justify-content:center; margin:24px 0; }
+.otp-input {
+  width:48px; height:56px;
+  background:var(--bg3); border:1px solid var(--border2);
+  border-radius:var(--radius2); text-align:center;
+  font-size:22px; font-family:var(--mono); font-weight:600;
+  color:var(--text); outline:none; transition:all 0.15s;
+  caret-color:var(--accent);
+}
+.otp-input:focus { border-color:var(--accent); background:rgba(124,106,247,0.05); }
+.otp-input.filled { border-color:var(--accent3); color:var(--accent3); }
+
+.otp-resend { text-align:center; margin-top:8px; }
+.otp-resend button {
+  background:none; border:none; font-size:12px;
+  color:var(--text3); cursor:pointer; font-family:var(--body);
+  transition:color 0.15s;
+}
+.otp-resend button:not(:disabled):hover { color:var(--accent3); }
+.otp-resend button:disabled { opacity:0.4; cursor:not-allowed; }
+
+/* ── Right panel (feature showcase) ── */
+.right-panel {
+  display:flex; flex-direction:column; justify-content:center;
+  padding:64px 56px;
+}
+.right-headline {
+  font-family:var(--sans); font-size:40px; font-weight:800;
+  line-height:1.1; letter-spacing:-1px; color:var(--text); margin-bottom:16px;
+}
+.right-headline span {
+  background:linear-gradient(135deg, var(--cyan), var(--accent3));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+}
+.right-sub { font-size:14px; color:var(--text2); line-height:1.7; max-width:360px; margin-bottom:40px; }
+
+.terminal-card {
+  background:var(--bg2); border:1px solid var(--border2);
+  border-radius:var(--radius); overflow:hidden;
+  max-width:420px;
+  opacity:0; animation:fade-up 0.5s ease 0.3s forwards;
+}
+.terminal-topbar {
+  padding:10px 14px; border-bottom:1px solid var(--border);
+  display:flex; align-items:center; gap:6px;
+}
+.t-dot { width:10px; height:10px; border-radius:50%; }
+.terminal-body { padding:16px 20px; font-family:var(--mono); font-size:12px; line-height:1.9; }
+.t-line { opacity:0; animation:type-in 0.3s ease forwards; }
+.t-line:nth-child(1) { animation-delay:0.5s; }
+.t-line:nth-child(2) { animation-delay:0.9s; }
+.t-line:nth-child(3) { animation-delay:1.3s; }
+.t-line:nth-child(4) { animation-delay:1.7s; }
+.t-line:nth-child(5) { animation-delay:2.1s; }
+.t-prompt { color:var(--accent3); }
+.t-cmd    { color:var(--text); }
+.t-out    { color:var(--text3); }
+.t-ok     { color:var(--green); }
+
+@keyframes type-in { from{opacity:0;transform:translateX(-4px)} to{opacity:1;transform:none} }
+@keyframes fade-up { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+
+/* Spinner */
+.spinner {
+  width:14px; height:14px;
+  border:2px solid rgba(255,255,255,0.3); border-top-color:white;
+  border-radius:50%; animation:spin 0.7s linear infinite; display:none;
+}
+.submit-btn.loading .spinner { display:block; }
+.submit-btn.loading .btn-text { display:none; }
+@keyframes spin { to{transform:rotate(360deg)} }
+
+@media (max-width: 768px) {
+  .page { grid-template-columns:1fr; }
+  .right-panel { display:none; }
+  .left-panel { border-right:none; min-height:100vh; background:var(--bg); padding:32px 20px; }
+}
+</style>
+</head>
+<body>
+
+<div class="bg-layer">
+  <div class="bg-grid"></div>
+  <div class="bg-glow-1"></div>
+  <div class="bg-glow-2"></div>
+</div>
+
+<div class="page">
+  <!-- Left (form) -->
+  <div class="left-panel">
+    <div class="auth-card">
+
+      <div class="brand-row">
+        <div class="logo-mark">IPEM</div>
+        <div class="logo-text">IPEM</div>
+      </div>
+
+      <!-- Step indicator -->
+      <div class="steps">
+        <div class="step" id="step1">
+          <div class="step-dot">1</div>
+          <span>Account</span>
+        </div>
+        <div class="step-divider"></div>
+        <div class="step" id="step2">
+          <div class="step-dot">2</div>
+          <span>Verify</span>
+        </div>
+        <div class="step-divider"></div>
+        <div class="step" id="step3">
+          <div class="step-dot">3</div>
+          <span>Done</span>
+        </div>
+      </div>
+
+      <!-- ── STEP 1: Signup form ── -->
+      <div id="signupStep">
+        <div class="auth-title">Create account</div>
+        <div class="auth-subtitle">Join IPEM — it takes 30 seconds</div>
+
+        <div class="google-btn-container">
+          <div id="googleBtn"></div>
+        </div>
+
+        <div class="divider">
+          <div class="divider-line"></div>
+          <span class="divider-text">or</span>
+          <div class="divider-line"></div>
+        </div>
+
+        <div class="msg-box" id="signupMsg"></div>
+
+        <form id="signupForm" onsubmit="handleSignup(event)">
+          <div class="field">
+            <label class="field-label" for="name">DISPLAY NAME</label>
+            <input class="field-input" type="text" id="name" placeholder="Your name" autocomplete="name" required>
+          </div>
+          <div class="field">
+            <label class="field-label" for="email">EMAIL</label>
+            <input class="field-input" type="email" id="email" placeholder="you@example.com" autocomplete="email" required>
+          </div>
+          <div class="field">
+            <label class="field-label" for="password">PASSWORD</label>
+            <input class="field-input" type="password" id="password" placeholder="Min. 8 characters"
+              autocomplete="new-password" required oninput="checkPasswordStrength(this.value)">
+            <div class="pwd-strength">
+              <div class="pwd-bar" id="bar1"></div>
+              <div class="pwd-bar" id="bar2"></div>
+              <div class="pwd-bar" id="bar3"></div>
+              <div class="pwd-bar" id="bar4"></div>
+            </div>
+          </div>
+          <button class="submit-btn" id="signupBtn" type="submit">
+            <span class="btn-text">Create Account</span>
+            <div class="spinner"></div>
+          </button>
+        </form>
+
+        <div class="auth-footer">
+          Already have an account? <a href="./login.html">Sign in</a>
+        </div>
+      </div>
+
+      <!-- ── STEP 2: OTP verification ── -->
+      <div id="verifyStep" style="display:none">
+        <div class="auth-title">Check your email</div>
+        <div class="auth-subtitle" id="otpSubtitle">Enter the 6-digit code we sent to your email</div>
+
+        <div class="msg-box" id="verifyMsg"></div>
+
+        <div class="otp-row">
+          <input class="otp-input" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]"
+            oninput="handleOtpInput(this,0)" onkeydown="handleOtpKey(event,0)" id="otp0">
+          <input class="otp-input" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]"
+            oninput="handleOtpInput(this,1)" onkeydown="handleOtpKey(event,1)" id="otp1">
+          <input class="otp-input" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]"
+            oninput="handleOtpInput(this,2)" onkeydown="handleOtpKey(event,2)" id="otp2">
+          <input class="otp-input" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]"
+            oninput="handleOtpInput(this,3)" onkeydown="handleOtpKey(event,3)" id="otp3">
+          <input class="otp-input" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]"
+            oninput="handleOtpInput(this,4)" onkeydown="handleOtpKey(event,4)" id="otp4">
+          <input class="otp-input" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]"
+            oninput="handleOtpInput(this,5)" onkeydown="handleOtpKey(event,5)" id="otp5">
+        </div>
+
+        <button class="submit-btn" id="verifyBtn" onclick="handleVerifyOTP()" type="button">
+          <span class="btn-text">Verify Email</span>
+          <div class="spinner"></div>
+        </button>
+
+        <div class="otp-resend">
+          <button id="resendBtn" onclick="handleResend()" disabled>
+            Resend code (<span id="resendCountdown">60</span>s)
+          </button>
+        </div>
+
+        <div class="auth-footer" style="margin-top:16px">
+          Wrong email? <a href="./signup.html">Start over</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Right panel (showcase) -->
+  <div class="right-panel">
+    <div class="right-headline">
+      Build smarter.<br><span>Ship faster.</span>
+    </div>
+    <p class="right-sub">
+      IPEM remembers your context, understands your codebase, and executes programs on demand — all from a single chat interface.
+    </p>
+    <div class="terminal-card">
+      <div class="terminal-topbar">
+        <div class="t-dot" style="background:#f75a5a"></div>
+        <div class="t-dot" style="background:#f0a030"></div>
+        <div class="t-dot" style="background:#3dd68c"></div>
+        <span style="font-family:var(--mono);font-size:11px;color:var(--text3);margin-left:8px">ipem — terminal</span>
+      </div>
+      <div class="terminal-body">
+        <div class="t-line"><span class="t-prompt">user › </span><span class="t-cmd">write a bitcoin price checker in python</span></div>
+        <div class="t-line"><span class="t-out">  ✦ CODE_TASK detected — generating script...</span></div>
+        <div class="t-line"><span class="t-out">  ✦ Saved → btc_price/btc_price.py</span></div>
+        <div class="t-line"><span class="t-prompt">user › </span><span class="t-cmd">run it</span></div>
+        <div class="t-line"><span class="t-ok">  ✓ Bitcoin: $67,420.11 USD</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="./js/config.js"></script>
+<script>
+const API_BASE = window.IPEM_CONFIG?.API_BASE_URL || '/api';
+const GOOGLE_CLIENT_ID = window.IPEM_CONFIG?.GOOGLE_CLIENT_ID || '';
+
+let pendingEmail = '';
+
+// ─── Check URL params (redirected from login with UNVERIFIED) ─────────────────
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('step') === 'verify') {
+    const email = params.get('email') || sessionStorage.getItem('ipem_pending_email');
+    if (email) {
+      pendingEmail = email;
+      gotoVerifyStep(email);
+    }
+  }
+  setStep(1);
+})();
+
+// ─── Step UI ──────────────────────────────────────────────────────────────────
+function setStep(n) {
+  ['step1','step2','step3'].forEach((id, i) => {
+    const el = document.getElementById(id);
+    if (el) el.className = 'step' + (i+1 < n ? ' done' : i+1 === n ? ' active' : '');
+  });
+}
+
+function showMsg(id, text, type = 'error') {
+  const el = document.getElementById(id);
+  if (el) {
+    el.textContent = text;
+    el.className = `msg-box ${type}`;
+  }
+}
+
+// ─── Password strength ────────────────────────────────────────────────────────
+function checkPasswordStrength(pwd) {
+  let score = 0;
+  if (pwd.length >= 8)  score++;
+  if (/[A-Z]/.test(pwd)) score++;
+  if (/[0-9]/.test(pwd)) score++;
+  if (/[^A-Za-z0-9]/.test(pwd)) score++;
+
+  const cls = ['','weak','fair','good','strong'][score];
+  for (let i = 1; i <= 4; i++) {
+    const bar = document.getElementById('bar' + i);
+    if (bar) bar.className = 'pwd-bar' + (i <= score ? ' ' + cls : '');
+  }
+}
+
+// ─── Signup ───────────────────────────────────────────────────────────────────
+async function handleSignup(e) {
+  e.preventDefault();
+  const btn = document.getElementById('signupBtn');
+  const name = document.getElementById('name').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+
+  if (password.length < 8) {
+    showMsg('signupMsg', 'Password must be at least 8 characters');
+    return;
+  }
+
+  btn.classList.add('loading'); btn.disabled = true;
+  const msgBox = document.getElementById('signupMsg');
+  if (msgBox) msgBox.className = 'msg-box';
+
+  try {
+    const res = await fetch(`${API_BASE}/auth/signup`, {
+      method: 'POST',
+      headers: {
+        ...(window.IPEM_CONFIG?.DEFAULT_REQUEST_HEADERS || {}),
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ name, email, password })
+    });
+    const data = await res.json();
+    if (!res.ok) { showMsg('signupMsg', data.error || 'Signup failed'); return; }
+    pendingEmail = email;
+    gotoVerifyStep(email);
+  } catch {
+    showMsg('signupMsg', 'Cannot reach server. Check your connection.');
+  } finally {
+    btn.classList.remove('loading'); btn.disabled = false;
+  }
+}
+
+// ─── Goto verify step ─────────────────────────────────────────────────────────
+function gotoVerifyStep(email) {
+  document.getElementById('signupStep').style.display = 'none';
+  document.getElementById('verifyStep').style.display = 'block';
+  document.getElementById('otpSubtitle').textContent =
+    `We sent a 6-digit code to ${email}. It expires in 10 minutes.`;
+  setStep(2);
+  document.getElementById('otp0').focus();
+  startResendCountdown();
+}
+
+// ─── OTP input logic ──────────────────────────────────────────────────────────
+function handleOtpInput(el, idx) {
+  const val = el.value.replace(/[^0-9]/g, '');
+  el.value = val;
+  el.classList.toggle('filled', !!val);
+  if (val && idx < 5) document.getElementById('otp' + (idx+1)).focus();
+  if (getOTPValue().length === 6) handleVerifyOTP();
+}
+
+function handleOtpKey(e, idx) {
+  if (e.key === 'Backspace' && !e.target.value && idx > 0) {
+    document.getElementById('otp' + (idx-1)).focus();
+  }
+  if (e.key === 'v' && (e.ctrlKey || e.metaKey)) {
+    e.preventDefault();
+    navigator.clipboard.readText().then(text => {
+      const digits = text.replace(/[^0-9]/g,'').slice(0,6);
+      digits.split('').forEach((d,i) => {
+        const inp = document.getElementById('otp'+i);
+        if (inp) { inp.value = d; inp.classList.add('filled'); }
+      });
+      if (digits.length === 6) handleVerifyOTP();
+    });
+  }
+}
+
+function getOTPValue() {
+  return [0,1,2,3,4,5].map(i => document.getElementById('otp'+i)?.value || '').join('');
+}
+
+// ─── Verify OTP ───────────────────────────────────────────────────────────────
+async function handleVerifyOTP() {
+  const otp = getOTPValue();
+  if (otp.length !== 6) { showMsg('verifyMsg','Enter the complete 6-digit code'); return; }
+
+  const btn = document.getElementById('verifyBtn');
+  btn.classList.add('loading'); btn.disabled = true;
+  const msgBox = document.getElementById('verifyMsg');
+  if (msgBox) msgBox.className = 'msg-box';
+
+  try {
+    const res = await fetch(`${API_BASE}/auth/verify-otp`, {
+      method: 'POST',
+      headers: {
+        ...(window.IPEM_CONFIG?.DEFAULT_REQUEST_HEADERS || {}),
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include',
+      body: JSON.stringify({ email: pendingEmail, otp })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      showMsg('verifyMsg', data.error || 'Verification failed');
+      [0,1,2,3,4,5].forEach(i => {
+        const el = document.getElementById('otp'+i);
+        el.value = ''; el.classList.remove('filled');
+        el.classList.add('error');
+        setTimeout(() => el.classList.remove('error'), 600);
+      });
+      document.getElementById('otp0').focus();
+      return;
+    }
+
+    localStorage.setItem('ipem_token', data.token);
+    localStorage.setItem('ipem_user', JSON.stringify(data.user));
+    setStep(3);
+    showMsg('verifyMsg', '✓ Email verified! Redirecting...', 'success');
+    setTimeout(() => { window.location.href = './index.html'; }, 1000);
+
+  } catch {
+    showMsg('verifyMsg', 'Cannot reach server.');
+  } finally {
+    btn.classList.remove('loading'); btn.disabled = false;
+  }
+}
+
+// ─── Resend countdown ─────────────────────────────────────────────────────────
+function startResendCountdown() {
+  let remaining = 60;
+  const btn = document.getElementById('resendBtn');
+  const counter = document.getElementById('resendCountdown');
+  if (!btn || !counter) return;
+  btn.disabled = true;
+
+  const interval = setInterval(() => {
+    remaining--;
+    counter.textContent = remaining;
+    if (remaining <= 0) {
+      clearInterval(interval);
+      btn.textContent = 'Resend code';
+      btn.disabled = false;
+    }
+  }, 1000);
+}
+
+async function handleResend() {
+  const btn = document.getElementById('resendBtn');
+  btn.disabled = true;
+  const msgBox = document.getElementById('verifyMsg');
+  if (msgBox) msgBox.className = 'msg-box';
+
+  try {
+    const res = await fetch(`${API_BASE}/auth/resend-otp`, {
+      method: 'POST',
+      headers: {
+        ...(window.IPEM_CONFIG?.DEFAULT_REQUEST_HEADERS || {}),
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ email: pendingEmail })
+    });
+    const data = await res.json();
+    if (res.ok) {
+      showMsg('verifyMsg', '✓ New code sent!', 'success');
+      startResendCountdown();
+    } else {
+      showMsg('verifyMsg', data.error);
+      btn.disabled = false;
+    }
+  } catch {
+    showMsg('verifyMsg', 'Failed to resend.');
+    btn.disabled = false;
+  }
+}
+
+// ─── Google Identity Services ─────────────────────────────────────────────────
+window.onload = function () {
+  if (!GOOGLE_CLIENT_ID) return;
+
+  // Initialize GIS
+  google.accounts.id.initialize({
+    client_id: GOOGLE_CLIENT_ID,
+    callback: handleGoogleCredential,
+    auto_select: false,
+    cancel_on_tap_outside: true
+  });
+
+  // Render the official Google button
+  const btnEl = document.getElementById("googleBtn");
+  if (btnEl) {
+    google.accounts.id.renderButton(
+      btnEl,
+      {
+        theme: "outline",
+        size: "large",
+        width: 380,
+        shape: "rectangular",
+        logo_alignment: "left",
+        text: "signup_with"
+      }
+    );
+  }
+
+  // Optional: One Tap prompt
+  google.accounts.id.prompt();
+};
+
+async function handleGoogleCredential({ credential }) {
+  const btn = document.getElementById('signupBtn');
+  if (btn) { btn.classList.add('loading'); btn.disabled = true; }
+  try {
+    const res = await fetch(`${API_BASE}/auth/google`, {
+      method: 'POST',
+      headers: {
+        ...(window.IPEM_CONFIG?.DEFAULT_REQUEST_HEADERS || {}),
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include',
+      body: JSON.stringify({ credential })
+    });
+    const data = await res.json();
+    if (!res.ok) { showMsg('signupMsg', data.error); return; }
+    localStorage.setItem('ipem_token', data.token);
+    localStorage.setItem('ipem_user', JSON.stringify(data.user));
+    window.location.href = './index.html';
+  } catch {
+    showMsg('signupMsg', 'Google sign-in failed.');
+  } finally {
+    if (btn) { btn.classList.remove('loading'); btn.disabled = false; }
+  }
+}
+</script>
+</body>
+</html>

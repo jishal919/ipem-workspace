@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IPEM - Intelligent Program Execution &amp; Memory</title>
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="stylesheet" href="./css/styles.css">
+<link rel="stylesheet" href="./css/dialogs.css?v=1">
+</head>
+<body>
+
+<div class="titlebar">
+  <button class="mobile-menu-trigger" id="mobileMenuTrigger" onclick="toggleSidebar()" type="button">☰ Menu</button>
+  <div class="titlebar-brand" style="display:flex;align-items:center;gap:10px;">
+    <div class="logo-mark">IPEM</div>
+    <div class="logo-text">IPEM</div>
+  </div>
+  <div class="titlebar-divider"></div>
+  <div class="titlebar-right">
+    <div class="endpoint-config titlebar-runtime" title="n8n status">
+      <div class="endpoint-dot" id="connDot" style="background:var(--red)"></div>
+      <span id="webhookStatus" style="font-family:var(--mono);font-size:11px;color:var(--text3);">n8n</span>
+    </div>
+    <div class="endpoint-config titlebar-memory" onclick="toggleHistoryPanel()" title="Chat memory" style="cursor:pointer;gap:6px;">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style="color:var(--text3);flex-shrink:0;"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.2"/><path d="M6 3v3l2 1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <span id="memoryBadge" style="font-family:var(--mono);font-size:11px;color:var(--text3);">0 turns</span>
+    </div>
+    <div class="status-pill titlebar-agent">
+      <div class="status-dot" id="agentDot" style="background:var(--red)"></div>
+      <span id="agentStatus">Connecting...</span>
+    </div>
+    <div class="endpoint-config titlebar-server" title="Server status">
+      <span style="font-family:var(--mono);font-size:11px;color:var(--text3);" id="endpointStatus">Server</span>
+    </div>
+    <button class="icon-btn" type="button" aria-label="Toggle conversations" title="Toggle Conversations" onclick="toggleSidebar()">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="2" width="5" height="10" rx="1" stroke="currentColor" stroke-width="1.2"/><rect x="8" y="2" width="5" height="4" rx="1" stroke="currentColor" stroke-width="1.2"/><rect x="8" y="8" width="5" height="4" rx="1" stroke="currentColor" stroke-width="1.2"/></svg>
+    </button>
+    <button class="icon-btn" type="button" aria-label="Toggle explorer" title="Toggle Explorer" onclick="toggleExplorer()">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 3h10M2 7h7M2 11h5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+    </button>
+    <button class="icon-btn" type="button" aria-label="Refresh" title="Refresh" onclick="refreshAll()">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M12 7A5 5 0 1 1 7 2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><path d="M7 2l2-2M7 2l2 2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <a href="./admin.html" id="adminPanelLink" class="icon-btn" style="display:none;align-items:center;justify-content:center;" title="Control Center" aria-label="Admin Control Center">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+      </svg>
+    </a>
+    <div class="user-pill" onclick="openProfile()" title="View profile" style="display:flex;align-items:center;gap:8px;padding:4px 10px;background:var(--bg4);border:1px solid var(--border);border-radius:20px;font-size:11px;color:var(--text2);cursor:pointer;font-family:var(--body);">
+      <div id="userAvatar" style="width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--cyan));display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:white;font-family:var(--mono);"></div>
+      <span id="userName">...</span>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+  <!-- ── LEFT: Conversations sidebar ── -->
+  <div class="sidebar" id="sidebar">
+    <!-- Mobile Side Drawer Header -->
+    <div class="mobile-drawer-header" id="mobileDrawerHeader">
+      <!-- Mode 1: Conversations (default) -->
+      <div class="drawer-header-conv" id="drawerHeaderConv">
+        <div class="drawer-tabs-row">
+          <button class="drawer-tab-btn active" id="drawerTabConv" onclick="switchMobileDrawerMode('conversations')">Conversations</button>
+          <button class="drawer-tab-btn" id="drawerTabProg" onclick="switchMobileDrawerMode('programs')">Programs</button>
+        </div>
+        <button class="icon-btn new-chat-btn" onclick="newConversation(); closeMobilePanels();" title="New Chat" style="margin-right:8px;">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </button>
+        <button class="icon-btn close-drawer-btn" onclick="closeMobilePanels()" title="Close Menu">✕</button>
+      </div>
+      <!-- Mode 2: Programs -->
+      <div class="drawer-header-prog hidden" id="drawerHeaderProg">
+        <button class="drawer-back-btn" onclick="switchMobileDrawerMode('conversations')">← Conversations</button>
+        <span class="drawer-title-prog" style="font-family:var(--sans); font-size:12px; font-weight:600; color:var(--text3); text-transform:uppercase; letter-spacing:0.8px; margin: 0 auto;">Programs</span>
+        <label class="show-hidden-toggle-mobile" id="showHiddenToggleMobile" style="display:none; align-items:center; gap:4px; font-size:10px; color:var(--text3); cursor:pointer; font-family:var(--sans); font-weight:500; margin-right:8px;">
+          <input type="checkbox" id="showHiddenCheckboxMobile" onchange="toggleShowHiddenFiles(this.checked)" style="width:12px; height:12px; cursor:pointer;">
+          Show system
+        </label>
+        <button class="icon-btn close-drawer-btn" onclick="closeMobilePanels()" title="Close Menu">✕</button>
+      </div>
+    </div>
+
+    <!-- Desktop Sidebar Header (conversations only) -->
+    <div class="sidebar-header" id="desktopSidebarHeader">
+      <span class="sidebar-title">Chats</span>
+      <button class="icon-btn new-chat-btn" onclick="newConversation()" title="New Chat">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+
+    <!-- Conversations list content -->
+    <div class="conv-list-container" id="convListContainer">
+      <div class="sidebar-search" id="sidebarSearch">
+        <input type="text" id="convSearchInput" class="conv-search-input" placeholder="Search chats..." oninput="filterConversations()">
+      </div>
+      <div class="conv-list" id="convList">
+        <div class="programs-empty">No conversations yet.<br>Start chatting!</div>
+      </div>
+    </div>
+
+    <!-- Programs list content (visible only in programs mode on mobile) -->
+    <div class="sidebar-prog-content hidden" id="sidebarProgContent">
+      <div class="explorer-tabs" style="border-bottom: 1px solid var(--border);">
+        <div class="explorer-tab active" onclick="switchExplorerTab('files')">Files</div>
+        <div class="explorer-tab" onclick="switchExplorerTab('memory')">Memory</div>
+        <div class="explorer-tab" onclick="switchExplorerTab('sessions')">Sessions</div>
+      </div>
+      <div class="explorer-content" id="sidebarExplorerContent">
+        <div class="programs-empty">Loading...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── CENTER: Chat ── -->
+  <div class="chat-area">
+    <div class="workspace-view" id="chatWorkspace">
+      <div class="chat-topbar">
+        <div class="conv-title-area" id="convTitleArea">
+          <span class="conv-active-title" id="convActiveTitle">New Chat</span>
+        </div>
+        <div id="activeSessionBanner" class="active-session-banner hidden">
+          <div class="status-dot"></div>
+          <span id="activeSessionText">Session active</span>
+          <button onclick="stopCurrentSession()" style="margin-left:4px;background:rgba(247,90,90,0.15);border:1px solid rgba(247,90,90,0.2);color:var(--red);border-radius:3px;font-size:10px;padding:1px 6px;cursor:pointer;font-family:var(--body);">Stop</button>
+        </div>
+        <div style="margin-left:auto;display:flex;gap:8px;align-items:center;">
+          <button class="icon-btn" onclick="exportHistory()" title="Export history">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1v8M4 6l3 3 3-3M2 10v2a1 1 0 001 1h8a1 1 0 001-1v-2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <button class="icon-btn" onclick="clearChat()" title="Clear chat">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 4h10l-1 8H3L2 4zM5 4V2h4v2M1 4h12" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+        <!-- History dropdown -->
+        <div id="historyPanel" style="display:none;position:absolute;top:48px;right:0;width:340px;background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius);z-index:500;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.5);">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--border);">
+            <span style="font-family:var(--sans);font-size:12px;font-weight:600;color:var(--text);">Conversation Memory</span>
+            <div style="display:flex;gap:6px;">
+              <button onclick="exportHistory()" style="font-size:10px;padding:3px 8px;background:var(--bg4);border:1px solid var(--border2);color:var(--text2);border-radius:4px;cursor:pointer;font-family:var(--body);">Export</button>
+              <button onclick="clearChatHistory();api('DELETE','/history?session_id='+getActiveConvSessionId());renderMemoryBadge();renderHistoryPanel();notify('Memory cleared','info');" style="font-size:10px;padding:3px 8px;background:rgba(247,90,90,0.1);border:1px solid rgba(247,90,90,0.2);color:var(--red);border-radius:4px;cursor:pointer;font-family:var(--body);">Clear</button>
+            </div>
+          </div>
+          <div style="font-size:10px;color:var(--text3);font-family:var(--mono);padding:6px 14px;border-bottom:1px solid var(--border);background:var(--bg3);">
+            Last <span style="color:var(--accent3);">12</span> turns sent as context · conv: <span style="color:var(--accent3);" id="sessionIdDisplay">—</span>
+          </div>
+          <div id="historyPanelContent" style="max-height:300px;overflow-y:auto;"></div>
+        </div>
+      </div>
+
+      <div class="chat-messages" id="chatMessages">
+        <div class="welcome-state" id="welcomeState">
+          <div class="welcome-logo">IPEM</div>
+          <div class="welcome-title">IPEM Studio</div>
+          <div class="welcome-sub">Your intelligent code execution environment. Write, run, and interact with programs through natural language.</div>
+          <div class="welcome-chips">
+            <div class="welcome-chip" onclick="sendQuick('Write a Python script that fetches the current Bitcoin price')">Write Bitcoin price fetcher</div>
+            <div class="welcome-chip" onclick="sendQuick('Write a JavaScript program that asks for my name and greets me')">Interactive greeter in JS</div>
+            <div class="welcome-chip" onclick="sendQuick('Run it')">Run last program</div>
+            <div class="welcome-chip" onclick="sendQuick('What programs have I created?')">List my programs</div>
+            <div class="welcome-chip" onclick="sendQuick('Remember my name')">Remember my name</div>
+            <div class="welcome-chip" onclick="sendQuick('Write a web scraper in Python')">Python web scraper</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="input-area">
+        <div class="input-session-hint hidden" id="sessionHint">
+          <div class="status-dot" style="background:var(--blue);animation:none;"></div>
+          Program is waiting for your input - type your response and send
+        </div>
+        <div class="waiting-banner hidden" id="waitingBanner">
+          <div class="spinner"></div>
+          <span>Processing your request...</span>
+        </div>
+        <div class="input-box">
+          <textarea class="input-field" id="chatInput" placeholder="Ask IPEM to write code, run programs, or just chat..." rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+          <div class="input-footer">
+            <div class="input-footer-left">
+              <!-- LLM Model Selector (Antigravity-Style Pill) -->
+              <div class="model-selector-wrap" id="modelSelectorWrap">
+                <button type="button" class="model-pill-btn" id="modelPillBtn" onclick="toggleModelDropdown(event)" title="Choose AI Model">
+                  <span class="model-pill-icon" id="modelPillIcon">⚡</span>
+                  <span class="model-pill-label" id="modelPillLabel">Fast</span>
+                  <svg class="model-pill-arrow" width="10" height="10" viewBox="0 0 10 10" fill="none">
+                    <path d="M2.5 3.75L5 6.25L7.5 3.75" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+                <div class="model-dropdown hidden" id="modelDropdown">
+                  <div class="model-dropdown-header">Select Model</div>
+                  <div class="model-option active" data-model="fast" onclick="selectModel('fast', event)">
+                    <div class="model-opt-icon">⚡</div>
+                    <div class="model-opt-info">
+                      <div class="model-opt-name">Fast <span class="model-badge">Default</span></div>
+                      <div class="model-opt-sub">Instant general chat & fast responses</div>
+                    </div>
+                  </div>
+                  <div class="model-option" data-model="coder" onclick="selectModel('coder', event)">
+                    <div class="model-opt-icon">💻</div>
+                    <div class="model-opt-info">
+                      <div class="model-opt-name">Coding</div>
+                      <div class="model-opt-sub">Specialized for code generation & debugging</div>
+                    </div>
+                  </div>
+                  <div class="model-option" data-model="reasoning" onclick="selectModel('reasoning', event)">
+                    <div class="model-opt-icon">🧠</div>
+                    <div class="model-opt-info">
+                      <div class="model-opt-name">Reasoning</div>
+                      <div class="model-opt-sub">Multi-step thinking & complex problem solving</div>
+                    </div>
+                  </div>
+                  <div class="model-option" data-model="analysis" onclick="selectModel('analysis', event)">
+                    <div class="model-opt-icon">📊</div>
+                    <div class="model-opt-info">
+                      <div class="model-opt-name">Analysis</div>
+                      <div class="model-opt-sub">System architecture & log examination</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="input-hints">
+                <span class="input-hint">Enter Send</span>
+                <span class="input-hint">Shift+Enter Newline</span>
+                <span class="input-hint" id="modeHint">Chat mode</span>
+              </div>
+            </div>
+            <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1 6h10M7 2l4 4-4 4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Send
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="workspace-view editor-workspace hidden" id="editorWorkspace">
+      <div class="editor-topbar">
+        <div class="editor-file-meta">
+          <span class="editor-file-pill">IDE</span>
+          <span class="editor-file-name" id="editorFileName">No file selected</span>
+          <span class="editor-status" id="editorDirtyState">Saved</span>
+        </div>
+        <div class="editor-actions">
+          <button class="prog-btn prog-btn-run" id="editorRunBtn" onclick="runFromEditor()">Run</button>
+          <button class="prog-btn prog-btn-delete" id="editorDeleteBtn" onclick="deleteCurrentEditorFile()">Delete</button>
+          <button class="prog-btn prog-btn-view" id="editorSaveBtn" onclick="saveEditorFile()" disabled>Save</button>
+          <button class="icon-btn" title="Close editor" onclick="closeEditor()">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 3l8 8M11 3L3 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="editor-shell">
+        <div class="editor-surface">
+          <div class="editor-loading hidden" id="editorLoading">
+            <div class="spinner"></div>
+            <span id="editorLoadingText">Loading editor...</span>
+          </div>
+          <div class="editor-empty" id="editorEmptyState">Open a file to start editing.</div>
+          <div class="editor-pane" id="editorPane"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── RIGHT: Explorer ── -->
+  <div class="explorer" id="explorer">
+    <div class="explorer-header" style="display:flex; justify-content:space-between; align-items:center;">
+      <span class="sidebar-title">Explorer</span>
+      <label class="show-hidden-toggle" id="showHiddenToggle" style="display:none; align-items:center; gap:4px; font-size:10px; color:var(--text3); cursor:pointer; font-family:var(--sans); font-weight:500;">
+        <input type="checkbox" id="showHiddenCheckbox" onchange="toggleShowHiddenFiles(this.checked)" style="width:12px; height:12px; cursor:pointer; margin:0;">
+        Show system
+      </label>
+    </div>
+    <div class="explorer-tabs">
+      <div class="explorer-tab active" onclick="switchExplorerTab('files')">Files</div>
+      <div class="explorer-tab" onclick="switchExplorerTab('memory')">Memory</div>
+      <div class="explorer-tab" onclick="switchExplorerTab('sessions')">Sessions</div>
+    </div>
+    <div class="explorer-content" id="explorerContent"><div class="programs-empty">Loading...</div></div>
+  </div>
+</div>
+
+<button class="mobile-scrim" id="mobileScrim" type="button" aria-label="Close side panels" onclick="closeMobilePanels(true)"></button>
+
+<div class="statusbar">
+  <div class="statusbar-item bright" id="sb-status">Ready</div>
+  <div class="statusbar-item" id="sb-programs">0 programs</div>
+  <div class="statusbar-item" id="sb-session">No active session</div>
+  <div class="statusbar-item" style="margin-left:auto;" id="sb-time"></div>
+</div>
+
+<div class="modal-overlay" id="codeModal" onclick="closeModal(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="modalTitle">program.py</span>
+      <div style="display:flex;gap:8px;">
+        <button class="prog-btn prog-btn-run" id="modalRunBtn" onclick="runFromModal()">Run</button>
+        <button class="prog-btn prog-btn-delete" id="modalDeleteBtn" onclick="deleteCurrentModalFile()">Delete</button>
+        <button class="icon-btn" onclick="closeModalDirect()">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1 1l10 10M11 1L1 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="modal-body"><pre class="modal-code" id="modalCode"></pre></div>
+  </div>
+</div>
+
+<div class="auth-gate-overlay" id="authGateModal" role="dialog" aria-modal="true" aria-labelledby="authGateTitle" onclick="closeAuthGateOnBackdrop(event)">
+  <div class="auth-gate-dialog">
+    <div class="auth-gate-glow"></div>
+    <div class="auth-gate-header">
+      <div class="auth-gate-mark">IP</div>
+      <button class="icon-btn" type="button" aria-label="Close sign in prompt" onclick="closeAuthGateModal()">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1 1l10 10M11 1L1 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="auth-gate-body">
+      <div class="auth-gate-kicker">IPEM account</div>
+      <h2 id="authGateTitle">Sign in to continue</h2>
+      <p>Create an account or sign in to start chatting and save your conversations.</p>
+    </div>
+    <div class="auth-gate-actions">
+      <button class="auth-gate-primary" type="button" onclick="continueToAuthFlow()">Sign Up / Continue</button>
+      <button class="auth-gate-secondary" type="button" onclick="closeAuthGateModal()">Maybe Later</button>
+    </div>
+  </div>
+</div>
+
+<div class="context-menu" id="fileContextMenu">
+  <button class="context-menu-item" id="ctxViewBtn" onclick="handleFileContextAction('view')">View</button>
+  <button class="context-menu-item" id="ctxRunBtn" onclick="handleFileContextAction('run')">Run</button>
+  <button class="context-menu-item delete" id="ctxDeleteBtn" onclick="handleFileContextAction('delete')">Delete</button>
+</div>
+
+<div class="notif-container" id="notifContainer"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.2/min/vs/loader.min.js"></script>
+  <script src="js/config.js?v=3"></script>
+  <script src="js/dialogs.js?v=1"></script>
+  <script src="js/main.js?v=8"></script>
+</body>
+</html>

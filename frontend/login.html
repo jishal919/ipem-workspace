@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IPEM — Sign In</title>
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<style>
+:root {
+  --bg:#0a0a0f; --bg2:#0f0f18; --bg3:#14141f; --bg4:#1a1a28; --bg5:#1f1f30;
+  --border:rgba(255,255,255,0.06); --border2:rgba(255,255,255,0.1);
+  --text:#e8e8f0; --text2:#9090a8; --text3:#5a5a72;
+  --accent:#7c6af7; --accent2:#5d4fd4; --accent3:#a394ff;
+  --green:#3dd68c; --red:#f75a5a; --amber:#f0a030; --blue:#4a9eff; --cyan:#00d4ff;
+  --mono:'JetBrains Mono',monospace; --sans:'Syne',sans-serif; --body:'Inter',sans-serif;
+  --radius:10px; --radius2:6px;
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--body);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── Background grid + glow ── */
+.bg-layer {
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+}
+.bg-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(124,106,247,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(124,106,247,0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+.bg-glow-1 {
+  position: absolute;
+  width: 600px; height: 600px;
+  top: -200px; left: -100px;
+  background: radial-gradient(circle, rgba(124,106,247,0.12) 0%, transparent 70%);
+  animation: glow-drift 8s ease-in-out infinite alternate;
+}
+.bg-glow-2 {
+  position: absolute;
+  width: 400px; height: 400px;
+  bottom: -100px; right: -50px;
+  background: radial-gradient(circle, rgba(0,212,255,0.08) 0%, transparent 70%);
+  animation: glow-drift 12s ease-in-out infinite alternate-reverse;
+}
+@keyframes glow-drift {
+  from { transform: translate(0,0); }
+  to   { transform: translate(30px, 20px); }
+}
+
+/* ── Layout ── */
+.page {
+  position: relative; z-index: 1;
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 480px;
+  min-height: 100vh;
+}
+
+/* ── Left panel ── */
+.left-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 64px;
+}
+.left-brand {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 64px;
+}
+.logo-mark {
+  width: 40px; height: 40px;
+  background: linear-gradient(135deg, var(--accent), var(--cyan));
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 13px; font-weight: 600; color: white;
+}
+.logo-text {
+  font-family: var(--sans); font-size: 20px; font-weight: 700;
+  color: var(--text); letter-spacing: -0.3px;
+}
+
+.left-headline {
+  font-family: var(--sans); font-size: 48px; font-weight: 800;
+  line-height: 1.1; letter-spacing: -1.5px;
+  color: var(--text); margin-bottom: 20px;
+}
+.left-headline span {
+  background: linear-gradient(135deg, var(--accent3), var(--cyan));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.left-sub {
+  font-size: 15px; color: var(--text2); line-height: 1.7; max-width: 400px;
+  margin-bottom: 48px;
+}
+
+.feature-list { display: flex; flex-direction: column; gap: 14px; }
+.feature-item {
+  display: flex; align-items: center; gap: 12px;
+  opacity: 0; animation: fade-up 0.4s ease forwards;
+}
+.feature-item:nth-child(1) { animation-delay: 0.1s; }
+.feature-item:nth-child(2) { animation-delay: 0.2s; }
+.feature-item:nth-child(3) { animation-delay: 0.3s; }
+.feature-icon {
+  width: 32px; height: 32px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; flex-shrink: 0;
+}
+.feature-icon.purple { background: rgba(124,106,247,0.15); }
+.feature-icon.cyan   { background: rgba(0,212,255,0.12); }
+.feature-icon.green  { background: rgba(61,214,140,0.12); }
+.feature-text { font-size: 13px; color: var(--text2); }
+
+/* ── Right panel (form) ── */
+.right-panel {
+  background: var(--bg2);
+  border-left: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  padding: 48px 40px;
+}
+
+.auth-card {
+  width: 100%; max-width: 380px;
+  opacity: 0; animation: fade-up 0.5s ease 0.1s forwards;
+}
+.auth-title {
+  font-family: var(--sans); font-size: 24px; font-weight: 700;
+  color: var(--text); margin-bottom: 6px; letter-spacing: -0.3px;
+}
+.auth-subtitle { font-size: 13px; color: var(--text3); margin-bottom: 32px; }
+
+/* ── Google button ── */
+.google-btn-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 8px;
+  min-height: 44px;
+}
+
+/* ── Divider ── */
+.divider {
+  display: flex; align-items: center; gap: 12px;
+  margin: 20px 0;
+}
+.divider-line { flex: 1; height: 1px; background: var(--border); }
+.divider-text { font-size: 11px; color: var(--text3); font-family: var(--mono); }
+
+/* ── Form fields ── */
+.field { margin-bottom: 16px; }
+.field-label {
+  display: block; font-size: 11px; color: var(--text3);
+  margin-bottom: 6px; font-family: var(--mono); letter-spacing: 0.3px;
+}
+.field-input {
+  width: 100%; padding: 10px 14px;
+  background: var(--bg3); border: 1px solid var(--border2);
+  border-radius: var(--radius2);
+  font-size: 13px; color: var(--text); font-family: var(--body);
+  outline: none; transition: border-color 0.15s;
+}
+.field-input:focus { border-color: var(--accent); }
+.field-input::placeholder { color: var(--text3); }
+.field-input.error { border-color: var(--red); }
+
+.field-row {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 6px;
+}
+.field-forgot {
+  font-size: 11px; color: var(--text3); text-decoration: none;
+  font-family: var(--mono); transition: color 0.15s;
+}
+.field-forgot:hover { color: var(--accent3); }
+
+/* ── Submit button ── */
+.submit-btn {
+  width: 100%; padding: 12px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  border: none; border-radius: var(--radius);
+  font-size: 13px; font-weight: 500; color: white; font-family: var(--body);
+  cursor: pointer; transition: opacity 0.15s, transform 0.1s;
+  margin-top: 4px;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.submit-btn:hover { opacity: 0.9; }
+.submit-btn:active { transform: scale(0.99); }
+.submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ── Error / info message ── */
+.msg-box {
+  padding: 10px 14px; border-radius: var(--radius2);
+  font-size: 12px; font-family: var(--body);
+  margin-bottom: 16px; display: none;
+}
+.msg-box.error { background: rgba(247,90,90,0.1); border: 1px solid rgba(247,90,90,0.25); color: var(--red); }
+.msg-box.success { background: rgba(61,214,140,0.1); border: 1px solid rgba(61,214,140,0.25); color: var(--green); }
+.msg-box.show { display: block; }
+
+/* ── Footer link ── */
+.auth-footer {
+  text-align: center; margin-top: 24px;
+  font-size: 12px; color: var(--text3);
+}
+.auth-footer a { color: var(--accent3); text-decoration: none; }
+.auth-footer a:hover { text-decoration: underline; }
+
+/* ── Spinner ── */
+.spinner {
+  width: 14px; height: 14px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: white; border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  display: none;
+}
+.submit-btn.loading .spinner { display: block; }
+.submit-btn.loading .btn-text { display: none; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  .page { grid-template-columns: 1fr; }
+  .left-panel { display: none; }
+  .right-panel {
+    border-left: none;
+    min-height: 100vh;
+    background: var(--bg);
+    padding: 40px 24px;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="bg-layer">
+  <div class="bg-grid"></div>
+  <div class="bg-glow-1"></div>
+  <div class="bg-glow-2"></div>
+</div>
+
+<div class="page">
+  <!-- Left panel -->
+  <div class="left-panel">
+    <div class="left-brand">
+      <div class="logo-mark">IPEM</div>
+      <div class="logo-text">IPEM</div>
+    </div>
+    <div class="left-headline">
+      Code with<br><span>intelligence</span>.
+    </div>
+    <p class="left-sub">
+      IPEM is your local AI coding environment. Write, execute, and iterate on programs through natural language.
+    </p>
+    <div class="feature-list">
+      <div class="feature-item">
+        <div class="feature-icon purple">⚡</div>
+        <span class="feature-text">AI-powered code generation with context memory</span>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon cyan">▶</div>
+        <span class="feature-text">Execute Python, JS, Go, Rust and more — interactively</span>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon green">🔒</div>
+        <span class="feature-text">Your programs and memory, fully isolated and secure</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right panel (form) -->
+  <div class="right-panel">
+    <div class="auth-card">
+      <div class="auth-title">Welcome back</div>
+      <div class="auth-subtitle">Sign in to your IPEM account</div>
+
+      <!-- Google OAuth -->
+      <div class="google-btn-container">
+        <div id="googleBtn"></div>
+      </div>
+
+      <div class="divider">
+        <div class="divider-line"></div>
+        <span class="divider-text">or</span>
+        <div class="divider-line"></div>
+      </div>
+
+      <!-- Message box -->
+      <div class="msg-box" id="msgBox"></div>
+
+      <!-- Login form -->
+      <form id="loginForm" onsubmit="handleLogin(event)">
+        <div class="field">
+          <label class="field-label" for="email">EMAIL</label>
+          <input class="field-input" type="email" id="email" placeholder="you@example.com" autocomplete="email" required>
+        </div>
+        <div class="field">
+          <div class="field-row">
+            <label class="field-label" for="password" style="margin-bottom:0">PASSWORD</label>
+            <a href="#" class="field-forgot">Forgot password?</a>
+          </div>
+          <input class="field-input" type="password" id="password" placeholder="••••••••" autocomplete="current-password" required>
+        </div>
+        <button class="submit-btn" id="submitBtn" type="submit">
+          <span class="btn-text">Sign In</span>
+          <div class="spinner"></div>
+        </button>
+      </form>
+
+      <div class="auth-footer">
+        Don't have an account? <a href="./signup.html">Create one</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="./js/config.js"></script>
+<script>
+// ─── Config ───────────────────────────────────────────────────────────────────
+const API_BASE = window.IPEM_CONFIG?.API_BASE_URL || '/api';
+const GOOGLE_CLIENT_ID = window.IPEM_CONFIG?.GOOGLE_CLIENT_ID || '';
+
+// ─── Redirect if already logged in ───────────────────────────────────────────
+(async () => {
+  const token = localStorage.getItem('ipem_token');
+  if (!token) return;
+  try {
+    const r = await fetch(`${API_BASE}/auth/me`, {
+      headers: {
+        ...(window.IPEM_CONFIG?.DEFAULT_REQUEST_HEADERS || {}),
+        Authorization: `Bearer ${token}`
+      }
+    });
+    if (r.ok) window.location.href = './index.html';
+  } catch {}
+})();
+
+// ─── Message helper ───────────────────────────────────────────────────────────
+function showMsg(text, type = 'error') {
+  const box = document.getElementById('msgBox');
+  box.textContent = text;
+  box.className = `msg-box ${type} show`;
+}
+
+// ─── Login ────────────────────────────────────────────────────────────────────
+async function handleLogin(e) {
+  e.preventDefault();
+  const btn = document.getElementById('submitBtn');
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+
+  btn.classList.add('loading');
+  btn.disabled = true;
+  document.getElementById('msgBox').className = 'msg-box';
+
+  try {
+    const res = await fetch(`${API_BASE}/auth/login`, {
+      method: 'POST',
+      headers: {
+        ...(window.IPEM_CONFIG?.DEFAULT_REQUEST_HEADERS || {}),
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include',
+      body: JSON.stringify({ email, password })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      if (data.code === 'UNVERIFIED') {
+        sessionStorage.setItem('ipem_pending_email', data.email);
+        window.location.href = `./signup.html?step=verify&email=${encodeURIComponent(data.email)}`;
+        return;
+      }
+      showMsg(data.error || 'Login failed');
+      return;
+    }
+
+    localStorage.setItem('ipem_token', data.token);
+    localStorage.setItem('ipem_user', JSON.stringify(data.user));
+    window.location.href = './index.html';
+
+  } catch (err) {
+    showMsg('Cannot reach server. Check your connection.');
+  } finally {
+    btn.classList.remove('loading');
+    btn.disabled = false;
+  }
+}
+
+// ─── Google Identity Services ─────────────────────────────────────────────────
+window.onload = function () {
+  if (!GOOGLE_CLIENT_ID) return;
+
+  // Initialize GIS
+  google.accounts.id.initialize({
+    client_id: GOOGLE_CLIENT_ID,
+    callback: handleGoogleCredential,
+    auto_select: false,
+    cancel_on_tap_outside: true
+  });
+
+  // Render the official Google button
+  google.accounts.id.renderButton(
+    document.getElementById("googleBtn"),
+    {
+      theme: "outline",
+      size: "large",
+      width: 380,
+      shape: "rectangular",
+      logo_alignment: "left",
+      text: "continue_with"
+    }
+  );
+
+  // Optional: One Tap prompt
+  google.accounts.id.prompt();
+};
+
+async function handleGoogleCredential({ credential }) {
+  const btn = document.getElementById('submitBtn');
+  btn.classList.add('loading'); btn.disabled = true;
+  try {
+    const res = await fetch(`${API_BASE}/auth/google`, {
+      method: 'POST',
+      headers: {
+        ...(window.IPEM_CONFIG?.DEFAULT_REQUEST_HEADERS || {}),
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include',
+      body: JSON.stringify({ credential })
+    });
+    const data = await res.json();
+    if (!res.ok) { showMsg(data.error); return; }
+    localStorage.setItem('ipem_token', data.token);
+    localStorage.setItem('ipem_user', JSON.stringify(data.user));
+    window.location.href = './index.html';
+  } catch {
+    showMsg('Google sign-in failed. Try again.');
+  } finally {
+    btn.classList.remove('loading'); btn.disabled = false;
+  }
+}
+</script>
+</body>
+</html>

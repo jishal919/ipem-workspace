@@ -1,0 +1,29 @@
+{
+  "name": "ipem-backend",
+  "version": "1.0.0",
+  "description": "IPEM Express API",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.14.0",
+    "bcrypt": "^6.0.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
+    "dockerode": "^4.0.10",
+    "dotenv": "^17.4.0",
+    "express": "^5.2.1",
+    "google-auth-library": "^10.6.2",
+    "ioredis": "^5.10.1",
+    "jsdom": "^29.1.1",
+    "jsonwebtoken": "^9.0.3",
+    "node-pty": "^1.1.0",
+    "nodemailer": "^8.0.5",
+    "puppeteer": "^25.1.0",
+    "sqlite3": "^6.0.1"
+  }
+}
